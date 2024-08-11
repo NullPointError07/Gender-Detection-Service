@@ -4,8 +4,9 @@ import { GdQueueModel } from "../models/gdQueueModel";
 import { onTimeout } from "./onTimeout";
 import { onInvalidVideo } from "./onInvalidVideo";
 import { onGeneralError } from "./onGeneralError";
-import { ErrorTypes } from "../enums";
+import { ErrorTypes, QueueStatus } from "../enums";
 import { onComplete } from "./onComplete";
+import { updateQueueStatus } from "./updateQueueStatus";
 
 export async function processQueue() {
   try {
@@ -17,6 +18,8 @@ export async function processQueue() {
       //   .json({ message: "Cannot find any document, Collection Is Empty" });
       return "Cannot find any document, Collection Is Empty";
     }
+
+    await updateQueueStatus(oldestDocuemnt._id);
 
     const genderDetectionApi = `${process.env.BASE_URL}/mock-test`;
 

@@ -15,7 +15,7 @@ export interface GdQueueCompleted extends Document {
   female_percentage: number;
   total_frame_count: number;
   video_duration: string;
-  publish_status: "unpublished" | "in_progress";
+  publish_status: onCompleteStatus;
 }
 
 const GdQueueCompletedSchema: Schema = new Schema(

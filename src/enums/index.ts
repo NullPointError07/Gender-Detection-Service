@@ -1,3 +1,8 @@
+export enum QueueStatus {
+  PENDING = "pending",
+  IN_PROGRESS = "in_progress",
+}
+
 export enum ErrorTypes {
   TIMEOUT = "timeout",
   INVALID_VIDEO = "invalid_video",
