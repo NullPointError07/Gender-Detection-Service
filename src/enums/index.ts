@@ -13,3 +13,8 @@ export enum onCompleteStatus {
   UNPUBLISHED = "unpublished",
   IN_PROGRESS = "in_progress",
 }
+
+export enum GdPublishErrorTypes {
+  TIMEOUT = "timeout",
+  ERROR = "error",
+}

@@ -1,7 +1,9 @@
 import { Schema } from "mongoose";
+import { GdPublishErrorTypes } from "../enums";
 
 export interface GdPublishApiResponse {
   status: number;
+  error_type?: GdPublishErrorTypes;
   msg: String;
 }
 

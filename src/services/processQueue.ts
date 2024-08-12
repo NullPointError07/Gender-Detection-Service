@@ -1,12 +1,8 @@
-import express from "express";
 import axios from "axios";
 import { GdQueueModel } from "../models/gdQueueModel";
-import { onTimeout } from "./onTimeout";
-import { onInvalidVideo } from "./onInvalidVideo";
-import { onGeneralError } from "./onGeneralError";
-import { ErrorTypes, QueueStatus } from "../enums";
-import { onComplete } from "./onComplete";
-import { updateQueueStatus } from "./updateQueueStatus";
+import { onQueueComplete } from "./onQueueComplete";
+import { updateQueueStatus } from "../utils/updateQueueStatus";
+import { onQueueError } from "./onQueueError";
 
 export async function processQueue() {
   try {
@@ -21,7 +17,7 @@ export async function processQueue() {
 
     await updateQueueStatus(oldestDocuemnt._id);
 
-    const genderDetectionApi = `${process.env.BASE_URL}/mock-test`;
+    const genderDetectionApi = `${process.env.BASE_URL}/mock-ai`;
 
     const response = await axios.post(genderDetectionApi, oldestDocuemnt);
 
@@ -29,22 +25,10 @@ export async function processQueue() {
 
     switch (response.data.status) {
       case 0:
-        switch (response.data.error_type) {
-          case ErrorTypes.TIMEOUT:
-            await onTimeout(oldestDocuemnt, response.data);
-            break;
-          case ErrorTypes.INVALID_VIDEO:
-            await onInvalidVideo(oldestDocuemnt, response.data);
-            break;
-          case ErrorTypes.ERROR:
-            await onGeneralError(oldestDocuemnt, response.data);
-            break;
-          default:
-            console.error("Unknown error type:", response.data.error_type);
-        }
+        await onQueueError(oldestDocuemnt, response.data);
         break;
       case 1:
-        await onComplete(oldestDocuemnt, response.data);
+        await onQueueComplete(oldestDocuemnt, response.data);
         break;
       default:
         console.error("Unknown status type:", response.data.status);

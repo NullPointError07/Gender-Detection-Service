@@ -2,9 +2,9 @@ import { onCompleteStatus } from "../enums";
 import { ApiResponseSuccess } from "../models/apiResponse";
 import { GdQueueCompletedModel } from "../models/gdQueueCompletedModel";
 import { GdQueue } from "../models/gdQueueModel";
-import { deleteFromGdQueue } from "./deleteFromQueue";
+import { deleteFromGdQueue } from "../utils/deleteFromQueue";
 
-export async function onComplete(
+export async function onQueueComplete(
   oldestDocuemnt: GdQueue,
   apiResponse: ApiResponseSuccess
 ) {

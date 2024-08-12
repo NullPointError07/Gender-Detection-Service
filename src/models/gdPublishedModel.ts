@@ -21,7 +21,7 @@ export interface GdPublished extends Document {
   updatedAt: Date;
 }
 
-const GdPublishedSchema: Schema = new Schema(
+export const GdPublishedSchema: Schema = new Schema(
   {
     present_id: { type: Schema.Types.ObjectId, required: true, unique: true },
     s3_bucket_url: { type: String, required: true },

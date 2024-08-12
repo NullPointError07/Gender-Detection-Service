@@ -7,6 +7,6 @@ export async function updateQueueStatus(_id: any) {
       q_status: QueueStatus.IN_PROGRESS,
     });
   } catch (error) {
-    throw new Error("Failed to update document status");
+    throw new Error("Failed to update queue status");
   }
 }

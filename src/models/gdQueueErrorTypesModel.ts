@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 import { ApiResponseFail, ApiResponseFailSchema } from "./apiResponse";
 
-export interface GdQueueError extends Document {
+interface GdQueueErrorTypes extends Document {
   present_id: mongoose.Types.ObjectId;
   s3_bucket_url: string;
   gp_cdn_url: string;
@@ -11,7 +11,7 @@ export interface GdQueueError extends Document {
   updatedAt: Date;
 }
 
-const GdQueueErrorSchema: Schema = new Schema(
+const GdQueueErrorTypesSchema: Schema = new Schema(
   {
     present_id: { type: Schema.Types.ObjectId, required: true, unique: true },
     s3_bucket_url: { type: String, required: true },
@@ -25,7 +25,17 @@ const GdQueueErrorSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-export const GdQueueErrorModel = mongoose.model<GdQueueError>(
+export const GdQueueErrorModel = mongoose.model<GdQueueErrorTypes>(
   "gd_queue_error",
-  GdQueueErrorSchema
+  GdQueueErrorTypesSchema
+);
+
+export const GdQueueInvalidVideoModel = mongoose.model<GdQueueErrorTypes>(
+  "gd_queue_invalid_video",
+  GdQueueErrorTypesSchema
+);
+
+export const GdQueueTimeOutModel = mongoose.model<GdQueueErrorTypes>(
+  "gd_queue_timeout",
+  GdQueueErrorTypesSchema
 );
