@@ -4,6 +4,8 @@ import { GdSetQueueRouter } from "./src/routes/gdSetQueueRouter";
 import { GdQueueProcessorRouter } from "./src/routes/gdQueueProcessorRouter";
 import { processQueue } from "./src/services/processQueue";
 import { cronPublish } from "./src/services/cronPublish";
+import { cronQueueAdjustment } from "./src/services/cronQueueAdjustment";
+import { CronJob } from "cron";
 
 const app = express();
 app.use(express.json());
@@ -21,6 +23,18 @@ app.use("/gd-queue-processor", GdQueueProcessorRouter);
 
 app.get("/mock", (req, res) => {
   cronPublish();
+});
+
+const job = CronJob.from({
+  cronTime: "10 * * * * *",
+  onTick: function () {
+    console.log("You will see this message every second");
+  },
+  start: true,
+});
+
+app.get("/queue-adjustment", (req, res) => {
+  cronQueueAdjustment();
 });
 
 app.post("/mock-ai", (req, res) => {
