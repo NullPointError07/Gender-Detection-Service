@@ -4,7 +4,11 @@ import { GdQueueCompletedModel } from "../models/gdQueueCompletedModel";
 import { updatePublishStatus } from "../utils/updatePublishStatus";
 import { onGdPublishComplete } from "./onGdPublishComplete";
 import { onGdPublishError } from "./onGdPublishError";
+import { fanfareBackendApi } from "../utils/apiUrls";
 
+/**
+ * @description: "This Function will publish a video to fanfare backend from Gd Service(GdCompleted)"
+ */
 export async function cronPublish() {
   try {
     const oldestUnPublishedDoc = await GdQueueCompletedModel.findOne({
@@ -16,8 +20,6 @@ export async function cronPublish() {
     }
 
     await updatePublishStatus(oldestUnPublishedDoc?._id);
-
-    const fanfareBackendApi = `${process.env.BASE_URL}/mock-fanfare`;
 
     const response = await axios.post(fanfareBackendApi, oldestUnPublishedDoc);
 

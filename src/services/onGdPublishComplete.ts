@@ -3,6 +3,9 @@ import { GdPublishedModel } from "../models/gdPublishedModel";
 import { GdQueueCompleted } from "../models/gdQueueCompletedModel";
 import { deleteFromGdCompleted } from "../utils/deleteFromGdCompleted";
 
+/**
+ * @description: "This Function will move from gd completed to gd published"
+ */
 export async function onGdPublishComplete(
   oldestUnPublishedDoc: GdQueueCompleted,
   apiResponse: GdPublishApiResponse

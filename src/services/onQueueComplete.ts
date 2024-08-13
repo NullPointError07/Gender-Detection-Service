@@ -4,6 +4,9 @@ import { GdQueueCompletedModel } from "../models/gdQueueCompletedModel";
 import { GdQueue } from "../models/gdQueueModel";
 import { deleteFromGdQueue } from "../utils/deleteFromQueue";
 
+/**
+ * @description: "This function move document from queue to gd complete collection"
+ */
 export async function onQueueComplete(
   oldestDocuemnt: GdQueue,
   apiResponse: ApiResponseSuccess

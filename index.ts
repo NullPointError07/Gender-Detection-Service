@@ -26,13 +26,23 @@ app.get("/mock", (req, res) => {
 });
 
 const job = CronJob.from({
-  cronTime: "10 * * * * *",
+  cronTime: "0 * * * * *",
+  // cronTime: "0 0 6 * * *", // means it will run everyday at 6 a.m
   onTick: function () {
-    console.log("You will see this message every second");
+    console.log(`${new Date()} You will see this message every minute`);
   },
   start: true,
 });
 
+// const jobQueueAdjustment = CronJob.from({
+//   cronTime: "0 6 * * *",
+//   onTick: function () {
+//     cronQueueAdjustment();
+//   },
+//   start: true,
+// });
+
+// this is just demo, it will be cron
 app.get("/queue-adjustment", (req, res) => {
   cronQueueAdjustment();
 });

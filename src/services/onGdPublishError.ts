@@ -7,6 +7,9 @@ import {
 import { GdQueueCompleted } from "../models/gdQueueCompletedModel";
 import { deleteFromGdCompleted } from "../utils/deleteFromGdCompleted";
 
+/**
+ * @description: "This Function will handle error types and create error document in error collection according to type"
+ */
 export async function onGdPublishError(
   oldestUnPublishedDoc: GdQueueCompleted,
   apiResponse: GdPublishApiResponse

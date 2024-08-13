@@ -8,6 +8,9 @@ import {
 import { GdQueue } from "../models/gdQueueModel";
 import { deleteFromGdQueue } from "../utils/deleteFromQueue";
 
+/**
+ * @description: "This Function will handle error types and create error document in error collection according to type"
+ */
 export async function onQueueError(
   oldestDocuemnt: GdQueue,
   apiResponse: ApiResponseFail

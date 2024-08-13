@@ -3,7 +3,11 @@ import { GdQueueModel } from "../models/gdQueueModel";
 import { onQueueComplete } from "./onQueueComplete";
 import { updateQueueStatus } from "../utils/updateQueueStatus";
 import { onQueueError } from "./onQueueError";
+import { genderDetectionApi } from "../utils/apiUrls";
 
+/**
+ * @description: "This function will process the video send request in ai model and save the response according response status"
+ */
 export async function processQueue() {
   try {
     const oldestDocuemnt = await GdQueueModel.findOne().exec();
@@ -16,8 +20,6 @@ export async function processQueue() {
     }
 
     await updateQueueStatus(oldestDocuemnt._id);
-
-    const genderDetectionApi = `${process.env.BASE_URL}/mock-ai`;
 
     const response = await axios.post(genderDetectionApi, oldestDocuemnt);
 
