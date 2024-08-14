@@ -26,4 +26,8 @@ const GdQueueSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-export const GdQueueModel = mongoose.model<GdQueue>("gd_queue", GdQueueSchema);
+export const GdQueueModel = mongoose.model<GdQueue>(
+  "gd_queue",
+  GdQueueSchema,
+  "gd_queue"
+);

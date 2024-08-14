@@ -8,7 +8,8 @@ export interface ApiResponseSuccess {
     male_percentage: number;
     female_percentage: number;
     total_frame_count: number;
-    video_duration: string;
+    frame_rate: string;
+    duration: string;
   };
 }
 
@@ -28,7 +29,8 @@ export const ApiResponseSuccessSchema: Schema = new Schema(
           male_percentage: { type: Number, required: true },
           female_percentage: { type: Number, required: true },
           total_frame_count: { type: Number, required: true },
-          video_duration: { type: String, required: true },
+          frame_rate: { type: Number, required: true },
+          duration: { type: String, required: true },
         },
         { _id: false }
       ),

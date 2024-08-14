@@ -27,15 +27,18 @@ const GdQueueErrorTypesSchema: Schema = new Schema(
 
 export const GdQueueErrorModel = mongoose.model<GdQueueErrorTypes>(
   "gd_queue_error",
-  GdQueueErrorTypesSchema
+  GdQueueErrorTypesSchema,
+  "gd_queue_error"
 );
 
 export const GdQueueInvalidVideoModel = mongoose.model<GdQueueErrorTypes>(
   "gd_queue_invalid_video",
-  GdQueueErrorTypesSchema
+  GdQueueErrorTypesSchema,
+  "gd_queue_invalid_video"
 );
 
 export const GdQueueTimeOutModel = mongoose.model<GdQueueErrorTypes>(
   "gd_queue_timeout",
-  GdQueueErrorTypesSchema
+  GdQueueErrorTypesSchema,
+  "gd_queue_timeout"
 );

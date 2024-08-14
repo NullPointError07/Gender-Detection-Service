@@ -1,4 +1,5 @@
 import axios from "axios";
+import express from "express";
 import { GdQueueModel } from "../models/gdQueueModel";
 import { onQueueComplete } from "./onQueueComplete";
 import { updateQueueStatus } from "../utils/updateQueueStatus";
@@ -10,20 +11,35 @@ import { genderDetectionApi } from "../utils/apiUrls";
  */
 export async function processQueue() {
   try {
+    console.log(
+      `+------------------ QUEUE PROCESSOR STARTED AT ${new Date()} ----------------------+`
+    );
+    console.log("| Fetching oldest item in gd-queue");
     const oldestDocuemnt = await GdQueueModel.findOne().exec();
 
     if (!oldestDocuemnt) {
       // return res
       //   .status(404)
       //   .json({ message: "Cannot find any document, Collection Is Empty" });
+      console.log("| gd-queue empty, terminating process....");
       return "Cannot find any document, Collection Is Empty";
     }
 
+    console.log("| Oldest item has been fetched from gd-queue");
+    console.log("oldes doc", oldestDocuemnt);
+
+    console.log("| Updating q_status to 'in-progress'");
     await updateQueueStatus(oldestDocuemnt._id);
+    console.log("| q_status updated, processor is busy now");
 
-    const response = await axios.post(genderDetectionApi, oldestDocuemnt);
-
-    console.log("Response from /mock-test:", response.data);
+    console.log("| Invoking gd-micro-service-video-processor API");
+    const response = await axios.post(genderDetectionApi, {
+      url: oldestDocuemnt?.gp_cdn_url,
+    });
+    console.log(
+      "| gd-micro-service-video-processor sent output",
+      response.data
+    );
 
     switch (response.data.status) {
       case 0:
@@ -36,11 +52,17 @@ export async function processQueue() {
         console.error("Unknown status type:", response.data.status);
     }
 
-    await processQueue();
+    console.log("+-------------- Processing Complete -----------+\n\n\n\n");
+
+    //dispatch event
 
     // res
     //   .status(200)
-    //   .json({ data: oldestDocuemnt, message: "Data sent successfully" });
+    //   .json({
+    //     data: oldestDocuemnt,
+    //     result: response.data,
+    //     message: "Processor Is Completed",
+    //   });
   } catch (error) {
     // res.status(500).json({
     //   message: "Error fetching oldest document",

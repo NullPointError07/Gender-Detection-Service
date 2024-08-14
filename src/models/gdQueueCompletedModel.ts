@@ -14,7 +14,8 @@ export interface GdQueueCompleted extends Document {
   male_percentage: number;
   female_percentage: number;
   total_frame_count: number;
-  video_duration: string;
+  frame_rate: string;
+  duration: string;
   publish_status: onCompleteStatus;
 }
 
@@ -32,7 +33,8 @@ const GdQueueCompletedSchema: Schema = new Schema(
     male_percentage: { type: Number, required: true },
     female_percentage: { type: Number, required: true },
     total_frame_count: { type: Number, required: true },
-    video_duration: { type: String, required: true },
+    frame_rate: { type: String, required: true },
+    duration: { type: String, required: true },
     publish_status: {
       type: String,
       enum: Object.values(onCompleteStatus),
@@ -44,5 +46,6 @@ const GdQueueCompletedSchema: Schema = new Schema(
 
 export const GdQueueCompletedModel = mongoose.model<GdQueueCompleted>(
   "gd_queue_completed",
-  GdQueueCompletedSchema
+  GdQueueCompletedSchema,
+  "gd_queue_completed"
 );

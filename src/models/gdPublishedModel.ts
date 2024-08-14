@@ -15,7 +15,8 @@ export interface GdPublished extends Document {
   male_percentage: number;
   female_percentage: number;
   total_frame_count: number;
-  video_duration: string;
+  frame_rate: string;
+  duration: string;
   gd_publisher_api_response: GdPublishApiResponse;
   createdAt: Date;
   updatedAt: Date;
@@ -35,7 +36,8 @@ export const GdPublishedSchema: Schema = new Schema(
     male_percentage: { type: Number, required: true },
     female_percentage: { type: Number, required: true },
     total_frame_count: { type: Number, required: true },
-    video_duration: { type: String, required: true },
+    frame_rate: { type: String, required: true },
+    duration: { type: String, required: true },
     gd_publisher_api_response: {
       type: GdPublishApiResponseSchema,
       required: true,
@@ -46,5 +48,6 @@ export const GdPublishedSchema: Schema = new Schema(
 
 export const GdPublishedModel = mongoose.model<GdPublished>(
   "gd_published",
-  GdPublishedSchema
+  GdPublishedSchema,
+  "gd_published"
 );

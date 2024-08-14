@@ -17,6 +17,8 @@ export async function onGdPublishComplete(
     gd_publisher_api_response: apiResponse,
   };
 
+  console.log("Document to create in gdPublish", documentData);
+
   try {
     await GdPublishedModel.create(documentData);
 

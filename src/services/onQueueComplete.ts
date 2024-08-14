@@ -11,6 +11,8 @@ export async function onQueueComplete(
   oldestDocuemnt: GdQueue,
   apiResponse: ApiResponseSuccess
 ) {
+  console.log("about to complete....", apiResponse);
+
   const { _id, present_id, s3_bucket_url, gp_cdn_url, cloud_front_url } =
     oldestDocuemnt;
 
@@ -19,7 +21,8 @@ export async function onQueueComplete(
     male_percentage,
     female_percentage,
     total_frame_count,
-    video_duration,
+    frame_rate,
+    duration,
   } = apiResponse.data;
 
   try {
@@ -33,7 +36,8 @@ export async function onQueueComplete(
       male_percentage,
       female_percentage,
       total_frame_count,
-      video_duration,
+      frame_rate,
+      duration,
       publish_status: onCompleteStatus.UNPUBLISHED,
     });
 
