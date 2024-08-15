@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import { connectDB } from "./src/db/connectDB";
 import { GdSetQueueRouter } from "./src/routes/gdSetQueueRouter";
 import { GdQueueProcessorRouter } from "./src/routes/gdQueueProcessorRouter";
@@ -21,29 +21,58 @@ app.get("/", (req, res) => {
 app.use("/gd-set-queue", GdSetQueueRouter);
 app.use("/gd-queue-processor", GdQueueProcessorRouter);
 
+// define gd-prcessor-job
 const queueProcessorJob = CronJob.from({
   cronTime: "*/5 * * * *", // means it will run everyday at every 5 mins
   onTick: function () {
     processQueue();
   },
-  start: true,
+  start: false,
+});
+// START gd-processor-job
+app.get("/start-gd-processor", (req: Request, res: Response) => {
+  console.log("starting gd-processor");
+  queueProcessorJob.start();
+  console.log("gd-processor started");
+  res.status(200).json({ message: "gd-processor started successfully" });
+});
+// STOP gd-processor-job
+app.get("/stop-gd-processor", (req: Request, res: Response) => {
+  console.log("stopping gd-processor");
+  queueProcessorJob.stop();
+  console.log("gd-processor stopped");
+  res.status(200).json({ message: "gd-processor stopped successfully" });
 });
 
 const publisherJob = CronJob.from({
-  cronTime: "0 * * * * *", // means it will run everyday at every 1 min
+  cronTime: "* * * * *", // means it will run everyday at every 1 min
   onTick: function () {
     cronOutputPublisher();
   },
-  start: true,
+  start: false,
+});
+// START gd-publisher-job
+app.get("/start-gd-publisher", (req: Request, res: Response) => {
+  console.log("starting gd-publisher");
+  publisherJob.start();
+  console.log("gd-publisher started");
+  res.status(200).json({ message: "gd-publisher started successfully" });
+});
+// STOP gd-publisher-job
+app.get("/stop-gd-publisher", (req: Request, res: Response) => {
+  console.log("stopping gd-publisher");
+  publisherJob.stop();
+  console.log("gd-publisher stopped");
+  res.status(200).json({ message: "gd-publisher stopped successfully" });
 });
 
-const queueAdjustmentJob = CronJob.from({
-  cronTime: "0 0 6 * * *", // means it will run everyday at every 6 a.m
-  onTick: function () {
-    cronQueueAdjustment();
-  },
-  start: true,
-});
+// const queueAdjustmentJob = CronJob.from({
+//   cronTime: "0 0 6 * * *", // means it will run everyday at every 6 a.m
+//   onTick: function () {
+//     cronQueueAdjustment();
+//   },
+//   start: true,
+// });
 
 // app.get("/mock", (req, res) => {
 //   cronOutputPublisher();

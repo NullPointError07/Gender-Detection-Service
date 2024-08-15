@@ -21,7 +21,7 @@ export async function processQueue() {
       // return res
       //   .status(404)
       //   .json({ message: "Cannot find any document, Collection Is Empty" });
-      console.log("| gd-queue empty, terminating process....");
+      console.log("+--------- gd-queue empty, terminating process ---------+");
       return "Cannot find any document, Collection Is Empty";
     }
 
@@ -33,23 +33,55 @@ export async function processQueue() {
     console.log("| q_status updated, processor is busy now");
 
     console.log("| Invoking gd-micro-service-video-processor API");
-    const response = await axios.post(genderDetectionApi, {
-      url: oldestDocuemnt?.gp_cdn_url,
-    });
+    let response;
+    try {
+      response = await axios.post(
+        genderDetectionApi,
+        {
+          url: oldestDocuemnt?.gp_cdn_url,
+        },
+        {
+          timeout: 300000,
+        }
+      );
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.code === "ECONNABORTED") {
+          response = {
+            data: {
+              status: 0,
+              error_type: "timeout",
+              detail: "ECONNABORTED",
+            },
+          };
+        } else if (error.code === "ECONNREFUSED") {
+          response = {
+            data: {
+              status: 0,
+              error_type: "timeout",
+              detail: "ECONNREFUSED",
+            },
+          };
+        }
+      } else {
+        throw new Error("An unexpected axios error occured");
+      }
+    }
+
     console.log(
       "| gd-micro-service-video-processor sent output",
-      response.data
+      response?.data
     );
 
-    switch (response.data.status) {
+    switch (response?.data.status) {
       case 0:
-        await onQueueError(oldestDocuemnt, response.data);
+        await onQueueError(oldestDocuemnt, response?.data);
         break;
       case 1:
-        await onQueueComplete(oldestDocuemnt, response.data);
+        await onQueueComplete(oldestDocuemnt, response?.data);
         break;
       default:
-        console.error("Unknown status type:", response.data.status);
+        console.error("Unknown status type:", response?.data.status);
     }
 
     console.log("+-------------- Processing Complete -----------+\n\n\n\n");
