@@ -27,7 +27,7 @@ app.get("/mock", (req, res) => {
 
 const queueProcessorJob = CronJob.from({
   // cronTime: "0 * * * * *",
-  cronTime: "*/5 * * * *", // means it will run everyday at every 10 mins
+  cronTime: "*/5 * * * *", // means it will run everyday at every 5 mins
   onTick: function () {
     processQueue();
   },
@@ -36,7 +36,7 @@ const queueProcessorJob = CronJob.from({
 
 const publisherJob = CronJob.from({
   // cronTime: "0 * * * * *",
-  cronTime: "0 * * * * *",
+  cronTime: "0 * * * * *", // means it will run everyday at every 1 min
   onTick: function () {
     cronPublish();
   },

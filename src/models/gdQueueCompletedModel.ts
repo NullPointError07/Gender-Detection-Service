@@ -1,15 +1,10 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { ApiResponseSuccess, ApiResponseSuccessSchema } from "./apiResponse";
 import { onCompleteStatus } from "../enums";
+import { SharedFields, SharedFieldsSchema } from "./sharedFields";
 
-export interface GdQueueCompleted extends Document {
-  present_id: mongoose.Types.ObjectId;
-  s3_bucket_url: string;
-  gp_cdn_url: string;
-  cloud_front_url: string;
+export interface GdQueueCompleted extends SharedFields {
   video_processor_api_response: ApiResponseSuccess;
-  createdAt: Date;
-  updatedAt: Date;
   max_person_count: number;
   male_percentage: number;
   female_percentage: number;
@@ -21,10 +16,7 @@ export interface GdQueueCompleted extends Document {
 
 const GdQueueCompletedSchema: Schema = new Schema(
   {
-    present_id: { type: Schema.Types.ObjectId, required: true, unique: true },
-    s3_bucket_url: { type: String, required: true },
-    gp_cdn_url: { type: String, required: true },
-    cloud_front_url: { type: String, required: true },
+    ...SharedFieldsSchema.obj,
     video_processor_api_response: {
       type: ApiResponseSuccessSchema,
       required: true,

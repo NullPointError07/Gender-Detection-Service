@@ -1,15 +1,12 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { ApiResponseSuccess, ApiResponseSuccessSchema } from "./apiResponse";
 import {
   GdPublishApiResponse,
   GdPublishApiResponseSchema,
 } from "./gdPublishApiResponse";
+import { SharedFields, SharedFieldsSchema } from "./sharedFields";
 
-export interface GdPublished extends Document {
-  present_id: mongoose.Types.ObjectId;
-  s3_bucket_url: string;
-  gp_cdn_url: string;
-  cloud_front_url: string;
+export interface GdPublished extends SharedFields {
   video_processor_api_response: ApiResponseSuccess;
   max_person_count: number;
   male_percentage: number;
@@ -18,16 +15,11 @@ export interface GdPublished extends Document {
   frame_rate: string;
   duration: string;
   gd_publisher_api_response: GdPublishApiResponse;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export const GdPublishedSchema: Schema = new Schema(
   {
-    present_id: { type: Schema.Types.ObjectId, required: true, unique: true },
-    s3_bucket_url: { type: String, required: true },
-    gp_cdn_url: { type: String, required: true },
-    cloud_front_url: { type: String, required: true },
+    ...SharedFieldsSchema.obj,
     video_processor_api_response: {
       type: ApiResponseSuccessSchema,
       required: true,
