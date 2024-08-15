@@ -6,9 +6,3 @@ export const GdPublishErrorModel = mongoose.model<GdPublished>(
   GdPublishedSchema,
   "gd_publish_error"
 );
-
-export const GdPublishTimeoutModel = mongoose.model<GdPublished>(
-  "gd_publish_timeout",
-  GdPublishedSchema,
-  "gd_publish_timeout"
-);

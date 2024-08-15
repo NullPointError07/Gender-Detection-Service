@@ -2,7 +2,7 @@ import { Schema } from "mongoose";
 import { ErrorTypes } from "../enums";
 
 export interface ApiResponseSuccess {
-  status: number;
+  status: 1;
   data: {
     max_person_count: number;
     male_percentage: number;
@@ -14,7 +14,7 @@ export interface ApiResponseSuccess {
 }
 
 export interface ApiResponseFail {
-  status: number;
+  status: 0;
   error_type: ErrorTypes;
   detail: string;
 }

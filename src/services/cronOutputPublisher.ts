@@ -9,7 +9,7 @@ import { genderPublicationApi } from "../utils/apiUrls";
 /**
  * @description: "This Function will publish a video to fanfare backend from Gd Service(GdCompleted)"
  */
-export async function cronPublish() {
+export async function cronOutputPublisher() {
   console.log(`+------ GD PUBLISHER STARTED AT ${new Date()} --------+`);
   try {
     console.log("| Fetching oldest unpublished item");
@@ -50,9 +50,40 @@ export async function cronPublish() {
 
     console.log("| Invoking publication API", publicationData);
 
-    const response = await axios.post(genderPublicationApi, publicationData);
-
-    console.log("| Publication API sent output", response.data);
+    let response;
+    try {
+      response = await axios.post(genderPublicationApi, publicationData, {
+        timeout: 50000,
+      });
+      console.log("| Publication API sent output", response.data);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.code === "ECONNREFUSED") {
+          response = {
+            data: {
+              status: 0,
+              msg: "ECONNREFUSED",
+            },
+          };
+        } else if (error.code === "ECONNABORTED") {
+          response = {
+            data: {
+              status: 0,
+              msg: "ECONNABORTED",
+            },
+          };
+        } else {
+          response = {
+            data: {
+              status: 0,
+              msg: "An unknown error type Occured",
+            },
+          };
+        }
+      } else {
+        throw new Error("An unexpected axios error occured");
+      }
+    }
 
     switch (response.data.status) {
       case 0:
@@ -67,6 +98,7 @@ export async function cronPublish() {
 
     console.log("+------ GD Publisher Complete --------+\n\n\n");
   } catch (error) {
-    throw new Error("Cron Publish Failed");
+    console.log(error);
+    throw new Error("Cron Publish Failed" + error);
   }
 }
