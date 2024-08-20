@@ -9,7 +9,7 @@ import { timeout } from "cron";
 export async function cronQueueAdjustment() {
   console.log(`+---------- QUEUE ADJUSTMENT INITIATED AT ${new Date()} ----------+`);
   const queryData = {
-    created_date: "2024-08-16", // this should be new date but new date data isnt available enough
+    created_date: "2024-08-19", // this should be new date but new date data isnt available enough
   };
   console.log(`| Adjustment will take place for: ${queryData.created_date}`);
 

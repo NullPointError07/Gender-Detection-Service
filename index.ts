@@ -24,7 +24,7 @@ app.use("/gd-queue-processor", GdQueueProcessorRouter);
 
 // define gd-prcessor-job
 const queueProcessorJob = CronJob.from({
-  cronTime: "*/5 * * * *", // means it will run everyday at every 5 mins
+  cronTime: "*/15 * * * *", // means it will run everyday at every 5 mins
   onTick: function () {
     processQueue();
   },
