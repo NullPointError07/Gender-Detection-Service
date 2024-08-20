@@ -21,6 +21,7 @@ app.get("/", (req, res) => {
 app.use("/gd-set-queue", GdSetQueueRouter);
 app.use("/gd-queue-processor", GdQueueProcessorRouter);
 
+
 // define gd-prcessor-job
 const queueProcessorJob = CronJob.from({
   cronTime: "*/5 * * * *", // means it will run everyday at every 5 mins
@@ -44,6 +45,8 @@ app.get("/stop-gd-processor", (req: Request, res: Response) => {
   res.status(200).json({ message: "gd-processor stopped successfully" });
 });
 
+
+// define gd-publisher-job
 const publisherJob = CronJob.from({
   cronTime: "* * * * *", // means it will run everyday at every 1 min
   onTick: function () {
@@ -66,13 +69,29 @@ app.get("/stop-gd-publisher", (req: Request, res: Response) => {
   res.status(200).json({ message: "gd-publisher stopped successfully" });
 });
 
-// const queueAdjustmentJob = CronJob.from({
-//   cronTime: "0 0 6 * * *", // means it will run everyday at every 6 a.m
-//   onTick: function () {
-//     cronQueueAdjustment();
-//   },
-//   start: true,
-// });
+
+// define queue-adjustment-job
+const queueAdjustmentJob = CronJob.from({
+  cronTime: "* * * * *", // means it will run everyday at every 6 a.m
+  onTick: function () {
+    cronQueueAdjustment();
+  },
+  start: false,
+});
+// START queue-adjustment-job
+app.get("/start-queue-adjustment", (req: Request, res: Response) => {
+  console.log("starting queue-adjustment");
+  queueAdjustmentJob.start();
+  console.log("queue-adjustment started");
+  res.status(200).json({ message: "queue-adjustment started successfully" });
+});
+// STOP queue-adjustment-job
+app.get("/stop-queue-adjustment", (req: Request, res: Response) => {
+  console.log("stopping queue-adjustment");
+  queueAdjustmentJob.stop();
+  console.log("queue-adjustment stopped");
+  res.status(200).json({ message: "queue-adjustment stopped successfully" });
+});
 
 // app.get("/mock", (req, res) => {
 //   cronOutputPublisher();

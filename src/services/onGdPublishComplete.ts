@@ -17,13 +17,15 @@ export async function onGdPublishComplete(
     gd_publisher_api_response: apiResponse,
   };
 
-  console.log("Document to create in gdPublish", documentData);
+  console.log(`| Published gd-results, video-id:${documentData.present_id}`);
 
   try {
     await GdPublishedModel.create(documentData);
 
     await deleteFromGdCompleted(_id);
+    console.log(`| Video has been moved from gd-completed to gd-published`);
   } catch (error) {
+    console.log(`| Failed to move video from gd-completed to gd-published`);
     throw new Error(
       "Failure to move from Gd Completed: From Gd Completed to GdPublished"
     );
