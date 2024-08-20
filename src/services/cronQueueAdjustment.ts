@@ -7,7 +7,9 @@ import { timeout } from "cron";
  * @description: "This Function will do a cron job to set every unqueued video from backend and set the video in the queue"
  */
 export async function cronQueueAdjustment() {
-  console.log(`+---------- QUEUE ADJUSTMENT INITIATED AT ${new Date()} ----------+`);
+  console.log(
+    `+---------- QUEUE ADJUSTMENT INITIATED AT ${new Date()} ----------+`
+  );
   const queryData = {
     created_date: "2024-08-19", // this should be new date but new date data isnt available enough
   };
@@ -16,23 +18,29 @@ export async function cronQueueAdjustment() {
   try {
     // fetch unqueued-items from fanfare-backend
     let response;
-    try{
-      response = await axios.get(queueAdjustmentApi, 
-        {data: queryData,timeout: 30*1000}
+    try {
+      response = await axios.get(queueAdjustmentApi, {
+        data: queryData,
+        timeout: 30 * 1000,
+      });
+    } catch (error: unknown) {
+      console.log(
+        "| Couldn't send queue-adjustment request to fanfare-backend, ",
+        (error as Error).message
       );
-    }catch (error: unknown) {
-      console.log("| Couldn't send queue-adjustment request to fanfare-backend, ",error.code);
     }
 
-
     const unqueuedVideos = response?.data?.data;
-    if(unqueuedVideos.length === 0 ){
+    if (unqueuedVideos.length === 0) {
       console.log("No items found for queue-adjustment, terminating process");
       console.log("+------- END -------+");
       return;
     }
 
-    console.log("| Following items will be added to gd-queue: ",unqueuedVideos);
+    console.log(
+      "| Following items will be added to gd-queue: ",
+      unqueuedVideos
+    );
 
     // prepare document for insertion
     const documentToInsert = unqueuedVideos.map((video: any) => ({
@@ -47,30 +55,40 @@ export async function cronQueueAdjustment() {
     // insert to gd-queue
     await GdQueueModel.insertMany(documentToInsert);
 
-    console.log(`| gd-queue has been populated with ${documentToInsert.length} new items`);
+    console.log(
+      `| gd-queue has been populated with ${documentToInsert.length} new items`
+    );
 
     // prepare acknowledgement data for fanfare-backend
     const presentIdsToSubmit = unqueuedVideos.map(
       (video: any) => video.present_id
     );
     const queueAcknowledegmentData = {
-      "present_ids":presentIdsToSubmit
+      present_ids: presentIdsToSubmit,
     };
 
-    console.log("| Sending queued-item-list to fanfare-backend: ", queueAcknowledegmentData);
+    console.log(
+      "| Sending queued-item-list to fanfare-backend: ",
+      queueAcknowledegmentData
+    );
 
     // acknowledge queue-adjustment to fanfare-backend
-    try{         
+    try {
       await axios.post(updateUnqueudPresentsApi, queueAcknowledegmentData);
       console.log("| Queue adjustment complete, terminating now");
-    }catch (error: unknown) {
-      console.log("| Couldn't acknowledge queue-adjustment to fanfare-backend, ", error.code);
+    } catch (error: unknown) {
+      console.log(
+        "| Couldn't acknowledge queue-adjustment to fanfare-backend, ",
+        (error as Error).message
+      );
     }
-    console.log("+------- END -------+")
-
+    console.log("+------- END -------+");
   } catch (error: unknown) {
-    console.log("| Couldn't complete queue-adjustment, ", error.message);
-    console.log("+------- END -------+")
+    console.log(
+      "| Couldn't complete queue-adjustment, ",
+      (error as Error).message
+    );
+    console.log("+------- END -------+");
     //throw new Error("Error fetching unqueued videos:" + error);
   }
 }
