@@ -23,7 +23,7 @@ app.use("/gd-queue-processor", GdQueueProcessorRouter);
 
 // define gd-prcessor-job
 const queueProcessorJob = CronJob.from({
-  cronTime: "*/15 * * * *", // means it will run everyday at every 5 mins
+  cronTime: "*/15 * * * *", // means it will run everyday at every 15 mins
   onTick: function () {
     processQueue();
   },
@@ -69,7 +69,7 @@ app.get("/stop-gd-publisher", (req: Request, res: Response) => {
 
 // define queue-adjustment-job
 const queueAdjustmentJob = CronJob.from({
-  cronTime: "* * * * *", // means it will run everyday at every 6 a.m
+  cronTime: "0 6 * * *", // means it will run everyday at every 6 a.m
   onTick: function () {
     cronQueueAdjustment();
   },
@@ -91,5 +91,7 @@ app.get("/stop-queue-adjustment", (req: Request, res: Response) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server has started on port http://localhost:${port}/`);
+  console.log(
+    `Gender Detection Micro Service has started on port http://localhost:${port}/`
+  );
 });
