@@ -38,7 +38,7 @@ export async function processQueue() {
       response = await axios.post(
         genderDetectionApi,
         {
-          url: oldestDocuemnt?.gp_cdn_url,
+          url: oldestDocuemnt?.s3_bucket_url,
         },
         {
           timeout: 300000,
