@@ -32,11 +32,17 @@ export async function processQueue() {
     await updateQueueStatus(oldestDocuemnt._id);
     console.log("| q_status updated, processor is busy now");
 
-    console.log("| Invoking gd-micro-service-video-processor API");
+    
     let response;
+    let videoUrl = process.env.USE_GP_CDN == "yes" ? oldestDocuemnt?.gp_cdn_url : oldestDocuemnt?.s3_bucket_url;
+
+    console.log("| Invoking gd-micro-service-video-processor API => ");
+    console.log(`| API URL: ${genderDetectionApi}`);
+    console.log(`| Video URL: ${videoUrl} <=`);
+
     try {
       response = await axios.post(genderDetectionApi, {
-        url: oldestDocuemnt?.gp_cdn_url,
+        url: videoUrl,
       });
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -45,10 +51,10 @@ export async function processQueue() {
           response = {
             data: {
               status: 0,
-              error_type: "timeout",
+              error_type: "timeout",                                                                                                                              
               detail: "ECONNABORTED",
             },
-          };
+          };                                                                                                                    
         } else if (error.code === "ECONNREFUSED") {
           response = {
             data: {
