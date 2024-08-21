@@ -36,7 +36,7 @@ export async function processQueue() {
     let response;
     try {
       response = await axios.post(genderDetectionApi, {
-        url: oldestDocuemnt?.gp_cdn_url,
+        url: oldestDocuemnt?.s3_bucket_url,
       });
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
