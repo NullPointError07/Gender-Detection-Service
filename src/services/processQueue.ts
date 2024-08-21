@@ -35,17 +35,12 @@ export async function processQueue() {
     console.log("| Invoking gd-micro-service-video-processor API");
     let response;
     try {
-      response = await axios.post(
-        genderDetectionApi,
-        {
-          url: oldestDocuemnt?.gp_cdn_url,
-        },
-        {
-          timeout: 300000,
-        }
-      );
+      response = await axios.post(genderDetectionApi, {
+        url: oldestDocuemnt?.gp_cdn_url,
+      });
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
+        console.log("| What is the type of Axios Error", error.code);
         if (error.code === "ECONNABORTED") {
           response = {
             data: {
@@ -85,16 +80,6 @@ export async function processQueue() {
     }
 
     console.log("+-------------- Processing Complete -----------+\n\n\n\n");
-
-    //dispatch event
-
-    // res
-    //   .status(200)
-    //   .json({
-    //     data: oldestDocuemnt,
-    //     result: response.data,
-    //     message: "Processor Is Completed",
-    //   });
   } catch (error) {
     // res.status(500).json({
     //   message: "Error fetching oldest document",

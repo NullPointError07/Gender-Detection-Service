@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
 import { connectDB } from "./src/db/connectDB";
 import { GdSetQueueRouter } from "./src/routes/gdSetQueueRouter";
-import { GdQueueProcessorRouter } from "./src/routes/gdQueueProcessorRouter";
 import { processQueue } from "./src/services/processQueue";
+import { GdQueueProcessorRouter } from "./src/routes/gdQueueProcessorRouter";
 import { cronOutputPublisher } from "./src/services/cronOutputPublisher";
 import { cronQueueAdjustment } from "./src/services/cronQueueAdjustment";
 import { CronJob } from "cron";
@@ -21,11 +21,24 @@ app.get("/", (req, res) => {
 app.use("/gd-set-queue", GdSetQueueRouter);
 app.use("/gd-queue-processor", GdQueueProcessorRouter);
 
+let isProcessorBusy = false;
+
 // define gd-prcessor-job
 const queueProcessorJob = CronJob.from({
   cronTime: "*/15 * * * *", // means it will run everyday at every 15 mins
-  onTick: function () {
-    processQueue();
+  onTick: async function () {
+    if (!isProcessorBusy) {
+      isProcessorBusy = true;
+      try {
+        await processQueue();
+      } catch (error) {
+        console.log("| An Error Occurred While Processing Queue");
+      } finally {
+        isProcessorBusy = false;
+      }
+    } else {
+      console.log("| Processor Is Busy, Skipping this tick");
+    }
   },
   start: false,
 });
