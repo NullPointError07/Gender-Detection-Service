@@ -25,7 +25,7 @@ let isProcessorBusy = false;
 
 // define gd-prcessor-job
 const queueProcessorJob = CronJob.from({
-  cronTime: "* * * * *", // means it will run everyday at every 15 mins
+  cronTime: "*/5 * * * *",
   onTick: async function () {
     console.log("+---------------- PROCESSOR-JOB AWAKE ---------------+");
     if (!isProcessorBusy) {
@@ -64,7 +64,7 @@ app.get("/stop-gd-processor", (req: Request, res: Response) => {
 
 // define gd-publisher-job
 const publisherJob = CronJob.from({
-  cronTime: "* * * * *", // means it will run everyday at every 1 min
+  cronTime: "10 * * * * *", 
   onTick: function () {
     cronOutputPublisher();
   },
