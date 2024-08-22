@@ -11,7 +11,9 @@ export async function cronQueueAdjustment() {
     `+---------- QUEUE ADJUSTMENT INITIATED AT ${new Date()} ----------+`
   );
   const queryData = {
-    created_date: "2024-08-19", // this should be new date but new date data isnt available enough
+    created_date: new Date(new Date().setDate(new Date().getDate() - 1))
+      .toISOString()
+      .split("T")[0],
   };
   console.log(`| Adjustment will take place for: ${queryData.created_date}`);
 

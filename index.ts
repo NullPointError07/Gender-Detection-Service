@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
 import { connectDB } from "./src/db/connectDB";
 import { GdSetQueueRouter } from "./src/routes/gdSetQueueRouter";
-import { GdQueueProcessorRouter } from "./src/routes/gdQueueProcessorRouter";
 import { processQueue } from "./src/services/processQueue";
+import { GdQueueProcessorRouter } from "./src/routes/gdQueueProcessorRouter";
 import { cronOutputPublisher } from "./src/services/cronOutputPublisher";
 import { cronQueueAdjustment } from "./src/services/cronQueueAdjustment";
 import { CronJob } from "cron";
@@ -14,18 +14,36 @@ const port = 6969;
 
 connectDB();
 
-app.get("/", (req, res) => {
+app.get("/", (req: express.Request, res: express.Response) => {
   res.send("Welcome to Gender Detection Service");
 });
 
 app.use("/gd-set-queue", GdSetQueueRouter);
 app.use("/gd-queue-processor", GdQueueProcessorRouter);
 
+let isProcessorBusy = false;
+
 // define gd-prcessor-job
 const queueProcessorJob = CronJob.from({
-  cronTime: "*/15 * * * *", // means it will run everyday at every 15 mins
-  onTick: function () {
-    processQueue();
+  cronTime: "* * * * *", // means it will run everyday at every 15 mins
+  onTick: async function () {
+    console.log("+---------------- PROCESSOR-JOB AWAKE ---------------+");
+    if (!isProcessorBusy) {
+      console.log("| Processor is free, take action");
+      isProcessorBusy = true;
+      try {
+        console.log("| About to start processing, processor is flagged as busy\n\n");
+        await processQueue();
+      } catch (error) {
+        console.log("| An error occurred while processing");
+      } finally {
+        isProcessorBusy = false;
+        console.log("| Processing completed, processor is flagged as free, waiting for next tick....");
+      }
+    } else {
+      console.log("| Processor is busy, skipping this tick");
+      console.log("+---------------- END -----------------+");
+    }
   },
   start: false,
 });

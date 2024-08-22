@@ -32,28 +32,29 @@ export async function processQueue() {
     await updateQueueStatus(oldestDocuemnt._id);
     console.log("| q_status updated, processor is busy now");
 
-    console.log("| Invoking gd-micro-service-video-processor API");
+    
     let response;
+    let videoUrl = process.env.USE_GP_CDN == "yes" ? oldestDocuemnt?.gp_cdn_url : oldestDocuemnt?.s3_bucket_url;
+
+    console.log("| Invoking gd-micro-service-video-processor API");
+    console.log(`| => API URL: ${genderDetectionApi}`);
+    console.log(`| => Video URL: ${videoUrl}`);
+
     try {
-      response = await axios.post(
-        genderDetectionApi,
-        {
-          url: oldestDocuemnt?.s3_bucket_url,
-        },
-        {
-          timeout: 300000,
-        }
-      );
+      response = await axios.post(genderDetectionApi, {
+        url: videoUrl,
+      });
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
+        console.log("| What is the type of Axios Error", error.code);
         if (error.code === "ECONNABORTED") {
           response = {
             data: {
               status: 0,
-              error_type: "timeout",
+              error_type: "timeout",                                                                                                                              
               detail: "ECONNABORTED",
             },
-          };
+          };                                                                                                                    
         } else if (error.code === "ECONNREFUSED") {
           response = {
             data: {
@@ -85,16 +86,6 @@ export async function processQueue() {
     }
 
     console.log("+-------------- Processing Complete -----------+\n\n\n\n");
-
-    //dispatch event
-
-    // res
-    //   .status(200)
-    //   .json({
-    //     data: oldestDocuemnt,
-    //     result: response.data,
-    //     message: "Processor Is Completed",
-    //   });
   } catch (error) {
     // res.status(500).json({
     //   message: "Error fetching oldest document",

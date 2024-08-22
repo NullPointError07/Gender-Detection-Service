@@ -48,14 +48,15 @@ export async function cronOutputPublisher() {
       video_duration: duration,
     };
 
-    console.log("| Invoking publication API", publicationData);
+    console.log("| Gender Publication API: ",genderPublicationApi);
+    console.log("| Invoking publication API with: ", publicationData);
 
     let response;
     try {
       response = await axios.post(genderPublicationApi, publicationData, {
         timeout: 50000,
       });
-      console.log("| Publication API sent output", response.data);
+      console.log("| Publication API sent output: ", response.data);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         if (error.code === "ECONNREFUSED") {
@@ -81,7 +82,12 @@ export async function cronOutputPublisher() {
           };
         }
       } else {
-        throw new Error("An unexpected axios error occured");
+        response = {
+          data: {
+            status: 0,
+            msg: "An unknown error type Occured",
+          },
+        };
       }
     }
 
