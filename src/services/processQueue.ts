@@ -36,9 +36,9 @@ export async function processQueue() {
     let response;
     let videoUrl = process.env.USE_GP_CDN == "yes" ? oldestDocuemnt?.gp_cdn_url : oldestDocuemnt?.s3_bucket_url;
 
-    console.log("| Invoking gd-micro-service-video-processor API => ");
-    console.log(`| API URL: ${genderDetectionApi}`);
-    console.log(`| Video URL: ${videoUrl} <=`);
+    console.log("| Invoking gd-micro-service-video-processor API");
+    console.log(`| => API URL: ${genderDetectionApi}`);
+    console.log(`| => Video URL: ${videoUrl}`);
 
     try {
       response = await axios.post(genderDetectionApi, {
