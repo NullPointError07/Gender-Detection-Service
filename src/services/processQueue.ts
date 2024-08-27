@@ -32,9 +32,11 @@ export async function processQueue() {
     await updateQueueStatus(oldestDocuemnt._id);
     console.log("| q_status updated, processor is busy now");
 
-    
     let response;
-    let videoUrl = process.env.USE_GP_CDN == "yes" ? oldestDocuemnt?.gp_cdn_url : oldestDocuemnt?.s3_bucket_url;
+    let videoUrl =
+      process.env.USE_GP_CDN == "yes"
+        ? oldestDocuemnt?.gp_cdn_url
+        : oldestDocuemnt?.s3_bucket_url;
 
     console.log("| Invoking gd-micro-service-video-processor API");
     console.log(`| => API URL: ${genderDetectionApi}`);
@@ -51,10 +53,10 @@ export async function processQueue() {
           response = {
             data: {
               status: 0,
-              error_type: "timeout",                                                                                                                              
+              error_type: "timeout",
               detail: "ECONNABORTED",
             },
-          };                                                                                                                    
+          };
         } else if (error.code === "ECONNREFUSED") {
           response = {
             data: {
@@ -65,7 +67,7 @@ export async function processQueue() {
           };
         }
       } else {
-        throw new Error("An unexpected axios error occured");
+        console.log("| An unexpected axios error occured");
       }
     }
 
@@ -87,10 +89,7 @@ export async function processQueue() {
 
     console.log("+-------------- Processing Complete -----------+\n\n\n\n");
   } catch (error) {
-    // res.status(500).json({
-    //   message: "Error fetching oldest document",
-    //   error: (error as Error).message,
-    // });
-    // then also again after error
+    console.log("| An Error Occured At Process Queue", error);
+    console.log("+------- END -------+");
   }
 }

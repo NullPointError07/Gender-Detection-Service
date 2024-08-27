@@ -43,6 +43,7 @@ export async function onQueueComplete(
 
     await deleteFromGdQueue(_id);
   } catch (error) {
-    throw new Error("Failure to move Queue: From Queue to Invalid Video");
+    console.log("| Failure to move Queue: From Queue to Invalid Video", error);
+    console.log("+------- END -------+");
   }
 }

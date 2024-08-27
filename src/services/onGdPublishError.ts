@@ -22,8 +22,10 @@ export async function onGdPublishError(
 
     await deleteFromGdCompleted(_id);
   } catch (error) {
-    throw new Error(
-      "Failure to move from Gd Completed: From Gd Completed to GdPublishTimeout/GdPublishError"
+    console.log(
+      "| Failure to move from Gd Completed: From Gd Completed to GdPublishTimeout/GdPublishError",
+      error
     );
+    console.log("+------- END -------+");
   }
 }

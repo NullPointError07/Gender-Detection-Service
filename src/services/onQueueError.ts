@@ -49,6 +49,7 @@ export async function onQueueError(
 
     await deleteFromGdQueue(_id);
   } catch (error) {
-    throw new Error("Failure to move Queue: From Queue to Timeout");
+    console.log("| Failure to move Queue: From Queue to Timeout", error);
+    console.log("+------- END -------+");
   }
 }

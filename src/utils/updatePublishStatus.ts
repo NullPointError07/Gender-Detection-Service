@@ -7,6 +7,7 @@ export async function updatePublishStatus(_id: any) {
       publish_status: onCompleteStatus.IN_PROGRESS,
     });
   } catch (error) {
-    throw new Error("Failed to update the published status");
+    console.log("| Failed to update the published status");
+    console.log("+------- END -------+");
   }
 }

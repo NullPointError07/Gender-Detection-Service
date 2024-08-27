@@ -48,7 +48,7 @@ export async function cronOutputPublisher() {
       video_duration: duration,
     };
 
-    console.log("| Gender Publication API: ",genderPublicationApi);
+    console.log("| Gender Publication API: ", genderPublicationApi);
     console.log("| Invoking publication API with: ", publicationData);
 
     let response;
@@ -104,7 +104,7 @@ export async function cronOutputPublisher() {
 
     console.log("+------ GD Publisher Complete --------+\n\n\n");
   } catch (error) {
-    console.log(error);
-    throw new Error("Cron Publish Failed" + error);
+    console.log("| Failure At Publishig Cron", error);
+    console.log("+------- END -------+");
   }
 }

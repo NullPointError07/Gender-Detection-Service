@@ -91,6 +91,5 @@ export async function cronQueueAdjustment() {
       (error as Error).message
     );
     console.log("+------- END -------+");
-    //throw new Error("Error fetching unqueued videos:" + error);
   }
 }
