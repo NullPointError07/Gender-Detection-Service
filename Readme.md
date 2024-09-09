@@ -1,4 +1,4 @@
-# Fanfare Gender Detection Micro Service
+# Fanfare Object Detection Micro Service
 
 ## Table of Contents
 
@@ -15,12 +15,12 @@
 1. **Clone the repository:**
 
    ```sh
-   git clone https://github.com/FanFareBD/gender-detection-micro-service
+   git clone https://github.com/FanFareBD/Object-detection-micro-service
    ```
 
 2. **Go to the project directory**
    ```sh
-   cd Gender Detection Service
+   cd Object Detection Service
    ```
 3. **Install dependencies**
 
@@ -39,8 +39,8 @@
    ```sh
    PORT=
    MONGO_URI=
-   GENDER_DETECTION_API_URL=
-   GD_PUBLICATION_API_URL=
+   OBJECT_DETECTION_API_URL=
+   OBJECT_PUBLICATION_API_URL=
    QUEUE_ADJUSTMENT_API_URL=
    QUEUE_ADJUSTMENT_ACKNOWLEDGEMENT_API_URL=
    ```
@@ -76,7 +76,7 @@
 
    You can see in server log
 
-   `Gender Detection Micro Service has started on port http://localhost:YOUR_PORT`
+   `Object Detection Micro Service has started on port http://localhost:YOUR_PORT`
 
 ## Starting Cron Jobs
 

@@ -1,25 +1,17 @@
 import { Schema } from "mongoose";
-import { ErrorTypes } from "../enums";
 
-export interface ApiResponseSuccess {
+export interface ApiResponseOk {
   status: 1;
   data: {
-    max_person_count: number;
-    male_percentage: number;
-    female_percentage: number;
+    max_counts: Record<string, number>;
     total_frame_count: number;
-    frame_rate: string;
+    frame_rate: number;
     duration: string;
+    processed_frame_count: number;
   };
 }
 
-export interface ApiResponseFail {
-  status: 0;
-  error_type: ErrorTypes;
-  detail: string;
-}
-
-export const ApiResponseSuccessSchema: Schema = new Schema(
+export const ApiResponseOkSchema: Schema = new Schema(
   {
     status: { type: Number, required: true },
     data: {
@@ -36,19 +28,6 @@ export const ApiResponseSuccessSchema: Schema = new Schema(
       ),
       required: true,
     },
-  },
-  { _id: false }
-);
-
-export const ApiResponseFailSchema: Schema = new Schema(
-  {
-    status: { type: Number, required: true },
-    error_type: {
-      type: String,
-      enum: Object.values(ErrorTypes),
-      required: true,
-    },
-    detail: { type: String, required: true },
   },
   { _id: false }
 );

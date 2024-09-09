@@ -1,10 +1,9 @@
 import axios from "axios";
-import express from "express";
-import { GdQueueModel } from "../models/gdQueueModel";
+import { ObdQueueModel } from "../models/obdQueueModel";
 import { onQueueComplete } from "./onQueueComplete";
 import { updateQueueStatus } from "../utils/updateQueueStatus";
 import { onQueueError } from "./onQueueError";
-import { genderDetectionApi } from "../utils/apiUrls";
+import { objectDetectionApi } from "../utils/apiUrls";
 
 /**
  * @description: "This function will process the video send request in ai model and save the response according response status"
@@ -15,7 +14,7 @@ export async function processQueue() {
       `+------------------ QUEUE PROCESSOR STARTED AT ${new Date()} ----------------------+`
     );
     console.log("| Fetching oldest item in gd-queue");
-    const oldestDocuemnt = await GdQueueModel.findOne().exec();
+    const oldestDocuemnt = await ObdQueueModel.findOne().exec();
 
     if (!oldestDocuemnt) {
       // return res
@@ -39,11 +38,11 @@ export async function processQueue() {
         : oldestDocuemnt?.s3_bucket_url;
 
     console.log("| Invoking gd-micro-service-video-processor API");
-    console.log(`| => API URL: ${genderDetectionApi}`);
+    console.log(`| => API URL: ${objectDetectionApi}`);
     console.log(`| => Video URL: ${videoUrl}`);
 
     try {
-      response = await axios.post(genderDetectionApi, {
+      response = await axios.post(objectDetectionApi, {
         url: videoUrl,
       });
     } catch (error: unknown) {

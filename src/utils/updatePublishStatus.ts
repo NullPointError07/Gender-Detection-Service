@@ -1,9 +1,9 @@
 import { onCompleteStatus } from "../enums";
-import { GdQueueCompletedModel } from "../models/gdQueueCompletedModel";
+import { ObdQueueCompletedModel } from "../models/obdQueueCompletedModel";
 
 export async function updatePublishStatus(_id: any) {
   try {
-    await GdQueueCompletedModel.findByIdAndUpdate(_id, {
+    await ObdQueueCompletedModel.findByIdAndUpdate(_id, {
       publish_status: onCompleteStatus.IN_PROGRESS,
     });
   } catch (error) {

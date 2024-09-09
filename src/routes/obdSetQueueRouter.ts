@@ -1,10 +1,10 @@
 import express from "express";
-import { GdQueueModel } from "../models/gdQueueModel";
+import { ObdQueueModel } from "../models/obdQueueModel";
 
 const router = express.Router();
 
 /**
- * @description: "This Function sets a new video in gender detection queue"
+ * @description: "This Function sets a new video in Object detection queue"
  */
 router.post("/", async (req, res) => {
   console.log("+------------ NEW QUEUE-ITEM COMING THROUGH ---------+");
@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
   }
 
   try {
-    await GdQueueModel.create(req.body);
+    await ObdQueueModel.create(req.body);
     console.log("| Queue set successful");
     console.log("+-------------- END -----------+");
     res.status(201).json({ status: 1, message: "Queue Set Successfully" });
@@ -32,4 +32,4 @@ router.post("/", async (req, res) => {
   }
 });
 
-export { router as GdSetQueueRouter };
+export { router as ObdSetQueueRouter };

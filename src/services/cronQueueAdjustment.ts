@@ -1,7 +1,6 @@
 import axios from "axios";
-import { GdQueueModel } from "../models/gdQueueModel";
+import { ObdQueueModel } from "../models/obdQueueModel";
 import { queueAdjustmentApi, updateUnqueudPresentsApi } from "../utils/apiUrls";
-import { timeout } from "cron";
 
 /**
  * @description: "This Function will do a cron job to set every unqueued video from backend and set the video in the queue"
@@ -55,7 +54,7 @@ export async function cronQueueAdjustment() {
     }));
 
     // insert to gd-queue
-    await GdQueueModel.insertMany(documentToInsert);
+    await ObdQueueModel.insertMany(documentToInsert);
 
     console.log(
       `| gd-queue has been populated with ${documentToInsert.length} new items`

@@ -1,10 +1,10 @@
-import { GdQueueModel } from "../models/gdQueueModel";
+import { ObdQueueModel } from "../models/obdQueueModel";
 
-export async function deleteFromGdQueue(_id: any) {
+export async function deleteFromObdQueue(_id: any) {
   try {
-    await GdQueueModel.findByIdAndDelete(_id);
+    await ObdQueueModel.findByIdAndDelete(_id);
   } catch (error) {
-    console.log("| Failure to move Queue: At deleting from gdQueue", error);
+    console.log("| Failure to move Queue: At deleting from ObdQueue", error);
     console.log("+------- END -------+");
   }
 }
