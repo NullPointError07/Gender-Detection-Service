@@ -1,10 +1,10 @@
 import axios from "axios";
 import { onCompleteStatus } from "../enums";
-import { GdQueueCompletedModel } from "../models/gdQueueCompletedModel";
+import { objectPublicationApi } from "../utils/apiUrls";
+import { onObdPublishError } from "./onObdPublishError";
+import { onObdPublishComplete } from "./onObdPublishComplete";
 import { updatePublishStatus } from "../utils/updatePublishStatus";
-import { onGdPublishComplete } from "./onGdPublishComplete";
-import { onGdPublishError } from "./onGdPublishError";
-import { genderPublicationApi } from "../utils/apiUrls";
+import { ObdQueueCompletedModel } from "../models/obdQueueCompletedModel";
 
 /**
  * @description: "This Function will publish a video to fanfare backend from Gd Service(GdCompleted)"
@@ -13,7 +13,7 @@ export async function cronOutputPublisher() {
   console.log(`+------ GD PUBLISHER STARTED AT ${new Date()} --------+`);
   try {
     console.log("| Fetching oldest unpublished item");
-    const oldestUnPublishedDoc = await GdQueueCompletedModel.findOne({
+    const oldestUnPublishedDoc = await ObdQueueCompletedModel.findOne({
       publish_status: onCompleteStatus.UNPUBLISHED,
     });
 
@@ -48,12 +48,12 @@ export async function cronOutputPublisher() {
       video_duration: duration,
     };
 
-    console.log("| Gender Publication API: ", genderPublicationApi);
+    console.log("| Gender Publication API: ", objectPublicationApi);
     console.log("| Invoking publication API with: ", publicationData);
 
     let response;
     try {
-      response = await axios.post(genderPublicationApi, publicationData, {
+      response = await axios.post(objectPublicationApi, publicationData, {
         timeout: 50000,
       });
       console.log("| Publication API sent output: ", response.data);
@@ -93,10 +93,10 @@ export async function cronOutputPublisher() {
 
     switch (response.data.status) {
       case 0:
-        await onGdPublishError(oldestUnPublishedDoc, response.data);
+        await onObdPublishError(oldestUnPublishedDoc, response.data);
         break;
       case 1:
-        await onGdPublishComplete(oldestUnPublishedDoc, response.data);
+        await onObdPublishComplete(oldestUnPublishedDoc, response.data);
         break;
       default:
         console.error("Unknown status type:", response.data.status);

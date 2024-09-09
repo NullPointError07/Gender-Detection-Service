@@ -1,11 +1,11 @@
 import { Schema } from "mongoose";
 
-export interface GdPublishApiResponse {
+export interface ObdPublishApiResponse {
   status: 0 | 1;
   msg: String;
 }
 
-export const GdPublishApiResponseSchema: Schema = new Schema(
+export const ObdPublishApiResponseSchema: Schema = new Schema(
   {
     status: { type: Number, required: true },
     msg: { type: String, required: true },

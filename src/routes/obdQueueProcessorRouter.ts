@@ -10,4 +10,4 @@ router.get("/", async (req, res) => {
   processQueue();
 });
 
-export { router as GdQueueProcessorRouter };
+export { router as ObdQueueProcessorRouter };

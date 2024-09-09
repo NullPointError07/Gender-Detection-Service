@@ -1,14 +1,14 @@
-import { GdPublishApiResponse } from "../models/gdPublishApiResponse";
-import { GdPublishErrorModel } from "../models/gdPublishErrorModel";
-import { GdQueueCompleted } from "../models/gdQueueCompletedModel";
-import { deleteFromGdCompleted } from "../utils/deleteFromGdCompleted";
+import { ObdPublishApiResponse } from "../models/obdPublishApiResponse";
+import { ObdPublishErrorModel } from "../models/obdPublishErrorModel";
+import { ObdQueueCompleted } from "../models/obdQueueCompletedModel";
+import { deleteFromObdCompleted } from "../utils/deleteFromObdCompleted";
 
 /**
  * @description: "This Function will handle error types and create error document in error collection according to type"
  */
-export async function onGdPublishError(
-  oldestUnPublishedDoc: GdQueueCompleted,
-  apiResponse: GdPublishApiResponse
+export async function onObdPublishError(
+  oldestUnPublishedDoc: ObdQueueCompleted,
+  apiResponse: ObdPublishApiResponse
 ) {
   const { _id, ...documentWithoutId } = oldestUnPublishedDoc.toObject();
 
@@ -18,9 +18,9 @@ export async function onGdPublishError(
   };
 
   try {
-    await GdPublishErrorModel.create(documentData);
+    await ObdPublishErrorModel.create(documentData);
 
-    await deleteFromGdCompleted(_id);
+    await deleteFromObdCompleted(_id);
   } catch (error) {
     console.log(
       "| Failure to move from Gd Completed: From Gd Completed to GdPublishTimeout/GdPublishError",

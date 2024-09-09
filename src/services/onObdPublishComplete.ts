@@ -1,14 +1,14 @@
-import { GdPublishApiResponse } from "../models/gdPublishApiResponse";
-import { GdPublishedModel } from "../models/gdPublishedModel";
-import { GdQueueCompleted } from "../models/gdQueueCompletedModel";
-import { deleteFromGdCompleted } from "../utils/deleteFromGdCompleted";
+import { ObdPublishApiResponse } from "../models/obdPublishApiResponse";
+import { ObdPublishedModel } from "../models/obdPublishedModel";
+import { ObdQueueCompleted } from "../models/obdQueueCompletedModel";
+import { deleteFromObdCompleted } from "../utils/deleteFromObdCompleted";
 
 /**
  * @description: "This Function will move from gd completed to gd published"
  */
-export async function onGdPublishComplete(
-  oldestUnPublishedDoc: GdQueueCompleted,
-  apiResponse: GdPublishApiResponse
+export async function onObdPublishComplete(
+  oldestUnPublishedDoc: ObdQueueCompleted,
+  apiResponse: ObdPublishApiResponse
 ) {
   const { _id, ...documentWithoutId } = oldestUnPublishedDoc.toObject();
 
@@ -20,9 +20,9 @@ export async function onGdPublishComplete(
   console.log(`| Published gd-results, video-id:${documentData.present_id}`);
 
   try {
-    await GdPublishedModel.create(documentData);
+    await ObdPublishedModel.create(documentData);
 
-    await deleteFromGdCompleted(_id);
+    await deleteFromObdCompleted(_id);
     console.log(`| Video has been moved from gd-completed to gd-published`);
   } catch (error) {
     console.log(

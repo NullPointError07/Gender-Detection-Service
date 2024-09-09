@@ -2,11 +2,11 @@ import mongoose, { Schema } from "mongoose";
 import { QueueStatus } from "../enums";
 import { SharedFields, SharedFieldsSchema } from "./sharedFields";
 
-export interface GdQueue extends SharedFields {
+export interface ObdQueue extends SharedFields {
   q_status: QueueStatus;
 }
 
-const GdQueueSchema: Schema = new Schema(
+const ObdQueueSchema: Schema = new Schema(
   {
     ...SharedFieldsSchema.obj,
     q_status: {
@@ -18,8 +18,8 @@ const GdQueueSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-export const GdQueueModel = mongoose.model<GdQueue>(
+export const ObdQueueModel = mongoose.model<ObdQueue>(
   "gd_queue",
-  GdQueueSchema,
+  ObdQueueSchema,
   "gd_queue"
 );

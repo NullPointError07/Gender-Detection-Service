@@ -1,10 +1,10 @@
 import mongoose, { Schema } from "mongoose";
-import { ApiResponseSuccess, ApiResponseSuccessSchema } from "./apiResponse";
+import { ApiResponseOk, ApiResponseOkSchema } from "./apiResponseOk";
 import { onCompleteStatus } from "../enums";
 import { SharedFields, SharedFieldsSchema } from "./sharedFields";
 
-export interface GdQueueCompleted extends SharedFields {
-  video_processor_api_response: ApiResponseSuccess;
+export interface ObdQueueCompleted extends SharedFields {
+  video_processor_api_response: ApiResponseOk;
   max_person_count: number;
   male_percentage: number;
   female_percentage: number;
@@ -14,11 +14,11 @@ export interface GdQueueCompleted extends SharedFields {
   publish_status: onCompleteStatus;
 }
 
-const GdQueueCompletedSchema: Schema = new Schema(
+const ObdQueueCompletedSchema: Schema = new Schema(
   {
     ...SharedFieldsSchema.obj,
     video_processor_api_response: {
-      type: ApiResponseSuccessSchema,
+      type: ApiResponseOkSchema,
       required: true,
     },
     max_person_count: { type: Number, required: true },
@@ -36,8 +36,8 @@ const GdQueueCompletedSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-export const GdQueueCompletedModel = mongoose.model<GdQueueCompleted>(
+export const ObdQueueCompletedModel = mongoose.model<ObdQueueCompleted>(
   "gd_queue_completed",
-  GdQueueCompletedSchema,
+  ObdQueueCompletedSchema,
   "gd_queue_completed"
 );
