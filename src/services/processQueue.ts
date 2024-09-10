@@ -62,7 +62,7 @@ export async function processQueue() {
       }
     }
 
-    console.log("| obd-micro-service-video-processor sent output", response?.data);
+    console.log("| Response from Object Detection Model", response?.data);
 
     switch (response?.data.status) {
       case 0:

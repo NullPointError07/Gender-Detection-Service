@@ -10,14 +10,18 @@ import { deleteFromObdQueue } from "../utils/deleteFromQueue";
 export async function onQueueComplete(oldestDocuemnt: ObdQueue, apiResponse: AiModelResponseOk) {
   console.log("about to complete....", apiResponse);
 
-  const { _id, ...documentWithoutId } = oldestDocuemnt;
+  const { _id, ...documentWithoutId } = oldestDocuemnt.toObject();
+
+  const completedData = {
+    ...documentWithoutId,
+    video_processor_api_response: apiResponse,
+    publish_status: onCompleteStatus.UNPUBLISHED,
+  };
+
+  console.log("completed data", completedData);
 
   try {
-    await ObdQueueCompletedModel.create({
-      ...documentWithoutId,
-      video_processor_api_response: apiResponse,
-      publish_status: onCompleteStatus.UNPUBLISHED,
-    });
+    await ObdQueueCompletedModel.create(completedData);
 
     await deleteFromObdQueue(_id);
   } catch (error) {
