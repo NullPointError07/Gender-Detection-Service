@@ -1,27 +1,18 @@
 import mongoose, { Schema } from "mongoose";
-import { ApiResponseOk, ApiResponseOkSchema } from "./apiResponseOk";
-import {
-  ObdPublishApiResponse,
-  ObdPublishApiResponseSchema,
-} from "./obdPublishApiResponse";
+import { AiModelResponseOk, AiModelResponseOkSchema } from "./aiModelResponseOk";
+import { ObdPublisherResponse, ObdPublisherResponseSchema } from "./obdPublisherResponse";
 import { SharedFields, SharedFieldsSchema } from "./sharedFields";
 
 export interface ObdPublished extends SharedFields {
-  video_processor_api_response: ApiResponseOk;
-  obd_publisher_api_response: ObdPublishApiResponse;
+  video_processor_api_response: AiModelResponseOk;
+  obd_publisher_api_response: ObdPublisherResponse;
 }
 
 export const ObdPublishedSchema: Schema = new Schema(
   {
     ...SharedFieldsSchema.obj,
-    video_processor_api_response: {
-      type: ApiResponseOkSchema,
-      required: true,
-    },
-    obd_publisher_api_response: {
-      type: ObdPublishApiResponseSchema,
-      required: true,
-    },
+    video_processor_api_response: { type: AiModelResponseOkSchema, required: true },
+    obd_publisher_api_response: { type: ObdPublisherResponseSchema, required: true },
   },
   { timestamps: true }
 );

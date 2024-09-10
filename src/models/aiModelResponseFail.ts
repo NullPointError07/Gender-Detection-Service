@@ -1,13 +1,13 @@
 import { Schema } from "mongoose";
 import { ErrorTypes } from "../enums";
 
-export interface ApiResponseFail {
+export interface AiModelResponseFail {
   status: 0;
   error_type: ErrorTypes;
   detail: string;
 }
 
-export const ApiResponseFailSchema: Schema = new Schema(
+export const AiModelResponseFailSchema: Schema = new Schema(
   {
     status: { type: Number, required: true },
     error_type: {

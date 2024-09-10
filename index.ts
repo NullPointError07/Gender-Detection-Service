@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { connectDB } from "./src/db/connectDB";
-import { ObdSetQueueRouter } from "./src/routes/obdSetQueueRouter";
+import { ObdSetQueueRouter } from "./src/routes/obdSetQueue";
 import { ObdProcessor } from "./src/routes/obdProcessor";
 import { ObdPublisher } from "./src/routes/obdPublisher";
 import { QueueAdjustment } from "./src/routes/obdQueueAdjustment";

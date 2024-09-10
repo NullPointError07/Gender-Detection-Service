@@ -7,10 +7,10 @@ import { updatePublishStatus } from "../utils/updatePublishStatus";
 import { ObdQueueCompletedModel } from "../models/obdQueueCompletedModel";
 
 /**
- * @description: "This Function will publish a video to fanfare backend from Gd Service(GdCompleted)"
+ * @description: "This Function will publish a video to fanfare backend from OBD Service(OBDCompleted)"
  */
 export async function cronOutputPublisher() {
-  console.log(`+------ GD PUBLISHER STARTED AT ${new Date()} --------+`);
+  console.log(`+------ OBD PUBLISHER STARTED AT ${new Date()} --------+`);
   try {
     console.log("| Fetching oldest unpublished item");
     const oldestUnPublishedDoc = await ObdQueueCompletedModel.findOne({
@@ -26,27 +26,11 @@ export async function cronOutputPublisher() {
 
     console.log("| Updating publish_status to in_progress");
     await updatePublishStatus(oldestUnPublishedDoc?._id);
-    console.log(
-      "| Updated publish_status to in_progress, publisher is busy now"
-    );
+    console.log("| Updated publish_status to in_progress, publisher is busy now");
 
-    const {
-      present_id,
-      max_person_count,
-      male_percentage,
-      female_percentage,
-      total_frame_count,
-      duration,
-    } = oldestUnPublishedDoc;
+    const { present_id, video_processor_api_response } = oldestUnPublishedDoc;
 
-    const publicationData = {
-      present_id,
-      max_person_count,
-      male_percentage,
-      female_percentage,
-      total_frame_count,
-      video_duration: duration,
-    };
+    const publicationData = { present_id, video_processor_api_response };
 
     console.log("| Object Publication API: ", objectPublicationApi);
     console.log("| Invoking publication API with: ", publicationData);
@@ -102,7 +86,7 @@ export async function cronOutputPublisher() {
         console.error("Unknown status type:", response.data.status);
     }
 
-    console.log("+------ GD Publisher Complete --------+\n\n\n");
+    console.log("+------ OBD Publisher Complete --------+\n\n\n");
   } catch (error) {
     console.log("| Failure At Publishig Cron", error);
     console.log("+------- END -------+");

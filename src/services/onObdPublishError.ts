@@ -1,4 +1,4 @@
-import { ObdPublishApiResponse } from "../models/obdPublishApiResponse";
+import { ObdPublisherResponse } from "../models/obdPublisherResponse";
 import { ObdPublishErrorModel } from "../models/obdPublishErrorModel";
 import { ObdQueueCompleted } from "../models/obdQueueCompletedModel";
 import { deleteFromObdCompleted } from "../utils/deleteFromObdCompleted";
@@ -8,7 +8,7 @@ import { deleteFromObdCompleted } from "../utils/deleteFromObdCompleted";
  */
 export async function onObdPublishError(
   oldestUnPublishedDoc: ObdQueueCompleted,
-  apiResponse: ObdPublishApiResponse
+  apiResponse: ObdPublisherResponse
 ) {
   const { _id, ...documentWithoutId } = oldestUnPublishedDoc.toObject();
 
@@ -23,7 +23,7 @@ export async function onObdPublishError(
     await deleteFromObdCompleted(_id);
   } catch (error) {
     console.log(
-      "| Failure to move from Gd Completed: From Gd Completed to GdPublishTimeout/GdPublishError",
+      "| Failure to move from Obd Completed: From Obd Completed to ObdPublishTimeout/ObdPublishError",
       error
     );
     console.log("+------- END -------+");

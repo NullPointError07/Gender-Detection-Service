@@ -10,12 +10,6 @@ router.post("/", async (req, res) => {
   console.log("+------------ NEW QUEUE-ITEM COMING THROUGH ---------+");
   console.log("| Payload data: ", req.body);
 
-  const { present_id, s3_bucket_url, gp_cdn_url, cloud_front_url } = req.body;
-
-  if (!present_id || !s3_bucket_url || !gp_cdn_url || !cloud_front_url) {
-    return res.status(400).json({ message: "Missing required fields" });
-  }
-
   try {
     await ObdQueueModel.create(req.body);
     console.log("| Queue set successful");

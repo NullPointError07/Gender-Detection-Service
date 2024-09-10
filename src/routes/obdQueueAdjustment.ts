@@ -3,8 +3,8 @@ import { queueAdjustmentJob } from "../services/cronJobs/queueAdjustmentJob";
 
 const router = express.Router();
 
-// START obd-publisher-job
-router.post("/start", async (req, res) => {
+// START queue-adjustment-job
+router.get("/start", async (req, res) => {
   console.log("starting queue-adjustment");
   queueAdjustmentJob.start();
   console.log("queue-adjustment started");
@@ -12,7 +12,7 @@ router.post("/start", async (req, res) => {
 });
 
 // STOP queue-adjustment-job
-router.post("/stop", async (req, res) => {
+router.get("/stop", async (req, res) => {
   console.log("stopping queue-adjustment");
   queueAdjustmentJob.stop();
   console.log("queue-adjustment stopped");

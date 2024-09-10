@@ -1,5 +1,5 @@
 import { ErrorTypes } from "../enums";
-import { ApiResponseFail } from "../models/apiResponseFail";
+import { AiModelResponseFail } from "../models/aiModelResponseFail";
 import {
   ObdQueueErrorModel,
   ObdQueueInvalidVideoModel,
@@ -11,10 +11,7 @@ import { deleteFromObdQueue } from "../utils/deleteFromQueue";
 /**
  * @description: "This Function will handle error types and create error document in error collection according to type"
  */
-export async function onQueueError(
-  oldestDocuemnt: ObdQueue,
-  apiResponse: ApiResponseFail
-) {
+export async function onQueueError(oldestDocuemnt: ObdQueue, apiResponse: AiModelResponseFail) {
   const { _id, ...documentWithoutId } = oldestDocuemnt.toObject();
 
   const documentData = {
@@ -24,7 +21,6 @@ export async function onQueueError(
 
   const { error_type } = apiResponse;
   console.log(`| video processing error, type:${error_type}`);
-  console.log(`defined as :${ErrorTypes.INVALID_VIDEO}`);
 
   try {
     switch (error_type) {

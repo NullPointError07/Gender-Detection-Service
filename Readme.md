@@ -80,40 +80,40 @@
 
 ## Starting Cron Jobs
 
-#### Starting Gd Processor Job
+#### Starting Obd Processor Job
 
 ```http
-  GET /start-gd-processor
+  GET /obd-processor/start
 ```
 
-#### Stopping Gd Processor Job
+#### Stopping Obd Processor Job
 
 ```http
-  GET /stop-gd-processor
+  GET /obd-processor/stop
 ```
 
-#### Starting Gd Publisher Job
+#### Starting Obd Publisher Job
 
 ```http
-  GET /start-gd-publisher
+  GET /obd-publisher/start
 ```
 
-#### Stopping Gd Publisher Job
+#### Stopping Obd Publisher Job
 
 ```http
-  GET /stop-gd-publisher
+  GET /obd-publisher/stop
 ```
 
-#### Starting Gd Queue Adjustment Job
+#### Starting Obd Queue Adjustment Job
 
 ```http
-  GET /start-queue-adjustment
+  GET /queue-adjustment/start
 ```
 
-#### Stopping Gd Queue Adjustment Job
+#### Stopping Obd Queue Adjustment Job
 
 ```http
-  GET /stop-queue-adjustment
+  GET /queue-adjustment/stop
 ```
 
 ## Authors

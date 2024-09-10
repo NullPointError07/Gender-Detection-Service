@@ -1,14 +1,14 @@
-import { ObdPublishApiResponse } from "../models/obdPublishApiResponse";
+import { ObdPublisherResponse } from "../models/obdPublisherResponse";
 import { ObdPublishedModel } from "../models/obdPublishedModel";
 import { ObdQueueCompleted } from "../models/obdQueueCompletedModel";
 import { deleteFromObdCompleted } from "../utils/deleteFromObdCompleted";
 
 /**
- * @description: "This Function will move from gd completed to gd published"
+ * @description: "This Function will move from obd completed to obd published"
  */
 export async function onObdPublishComplete(
   oldestUnPublishedDoc: ObdQueueCompleted,
-  apiResponse: ObdPublishApiResponse
+  apiResponse: ObdPublisherResponse
 ) {
   const { _id, ...documentWithoutId } = oldestUnPublishedDoc.toObject();
 
@@ -17,18 +17,15 @@ export async function onObdPublishComplete(
     obd_publisher_api_response: apiResponse,
   };
 
-  console.log(`| Published gd-results, video-id:${documentData.present_id}`);
+  console.log(`| Published obd-results, video-id:${documentData.present_id}`);
 
   try {
     await ObdPublishedModel.create(documentData);
 
     await deleteFromObdCompleted(_id);
-    console.log(`| Video has been moved from gd-completed to gd-published`);
+    console.log(`| Video has been moved from obd-completed to obd-published`);
   } catch (error) {
-    console.log(
-      `| Failed to move video from gd-completed to gd-published`,
-      error
-    );
+    console.log(`| Failed to move video from obd-completed to obd-published`, error);
     console.log("+------- END -------+");
   }
 }

@@ -1,16 +1,16 @@
 import mongoose, { Schema } from "mongoose";
-import { ApiResponseFail, ApiResponseFailSchema } from "./apiResponseFail";
+import { AiModelResponseFail, AiModelResponseFailSchema } from "./aiModelResponseFail";
 import { SharedFields, SharedFieldsSchema } from "./sharedFields";
 
 interface ObdQueueErrorTypes extends SharedFields {
-  video_processor_api_response: ApiResponseFail;
+  video_processor_api_response: AiModelResponseFail;
 }
 
 const ObdQueueErrorTypesSchema: Schema = new Schema(
   {
     ...SharedFieldsSchema.obj,
     video_processor_api_response: {
-      type: ApiResponseFailSchema,
+      type: AiModelResponseFailSchema,
       required: true,
     },
   },

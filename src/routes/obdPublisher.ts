@@ -4,7 +4,7 @@ import { publisherJob } from "../services/cronJobs/publisherJob";
 const router = express.Router();
 
 // START obd-publisher-job
-router.post("/start", async (req, res) => {
+router.get("/start", async (req, res) => {
   console.log("starting obd-publisher");
   publisherJob.start();
   console.log("obd-publisher started");
@@ -12,7 +12,7 @@ router.post("/start", async (req, res) => {
 });
 
 // STOP obd-publisher-job
-router.post("/stop", async (req, res) => {
+router.get("/stop", async (req, res) => {
   console.log("stopping obd-publisher");
   publisherJob.stop();
   console.log("obd-publisher stopped");

@@ -10,41 +10,33 @@ import { objectDetectionApi } from "../utils/apiUrls";
  */
 export async function processQueue() {
   try {
-    console.log(
-      `+------------------ QUEUE PROCESSOR STARTED AT ${new Date()} ----------------------+`
-    );
-    console.log("| Fetching oldest item in gd-queue");
-    const oldestDocuemnt = await ObdQueueModel.findOne().exec();
+    console.log(`+------------------ QUEUE PROCESSOR STARTED AT ${new Date()} ----------------------+`);
+    console.log("| Fetching oldest item in obd-queue");
+    const oldestDocuemnt = await ObdQueueModel.findOne({ q_status: "pending" }).exec();
 
     if (!oldestDocuemnt) {
-      // return res
-      //   .status(404)
-      //   .json({ message: "Cannot find any document, Collection Is Empty" });
-      console.log("+--------- gd-queue empty, terminating process ---------+");
+      console.log("+--------- obd-queue empty, terminating process ---------+");
       return "Cannot find any document, Collection Is Empty";
     }
 
-    console.log("| Oldest item has been fetched from gd-queue");
+    console.log("| Oldest item has been fetched from obd-queue");
     console.log("oldes doc", oldestDocuemnt);
 
+    const { _id, s3_bucket_url, gp_cdn_url } = oldestDocuemnt;
+
     console.log("| Updating q_status to 'in-progress'");
-    await updateQueueStatus(oldestDocuemnt._id);
+    await updateQueueStatus(_id);
     console.log("| q_status updated, processor is busy now");
 
     let response;
-    let videoUrl =
-      process.env.USE_GP_CDN == "yes"
-        ? oldestDocuemnt?.gp_cdn_url
-        : oldestDocuemnt?.s3_bucket_url;
+    let videoUrl = process.env.USE_GP_CDN == "yes" ? gp_cdn_url : s3_bucket_url;
 
-    console.log("| Invoking gd-micro-service-video-processor API");
+    console.log("| Invoking obd-micro-service-video-processor API");
     console.log(`| => API URL: ${objectDetectionApi}`);
     console.log(`| => Video URL: ${videoUrl}`);
 
     try {
-      response = await axios.post(objectDetectionApi, {
-        url: videoUrl,
-      });
+      response = await axios.post(objectDetectionApi, { url: videoUrl });
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         console.log("| What is the type of Axios Error", error.code);
@@ -70,10 +62,7 @@ export async function processQueue() {
       }
     }
 
-    console.log(
-      "| gd-micro-service-video-processor sent output",
-      response?.data
-    );
+    console.log("| obd-micro-service-video-processor sent output", response?.data);
 
     switch (response?.data.status) {
       case 0:

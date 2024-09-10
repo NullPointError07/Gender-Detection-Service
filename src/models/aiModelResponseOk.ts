@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
 
-export interface ApiResponseOk {
+export interface AiModelResponseOk {
   status: 1;
   data: {
     max_counts: Record<string, number>;
@@ -11,18 +11,17 @@ export interface ApiResponseOk {
   };
 }
 
-export const ApiResponseOkSchema: Schema = new Schema(
+export const AiModelResponseOkSchema: Schema = new Schema(
   {
     status: { type: Number, required: true },
     data: {
       type: new Schema(
         {
-          max_person_count: { type: Number, required: true },
-          male_percentage: { type: Number, required: true },
-          female_percentage: { type: Number, required: true },
+          max_counts: { type: Map, of: Number, required: true },
           total_frame_count: { type: Number, required: true },
           frame_rate: { type: Number, required: true },
           duration: { type: String, required: true },
+          processed_frame_count: { type: Number, required: true },
         },
         { _id: false }
       ),

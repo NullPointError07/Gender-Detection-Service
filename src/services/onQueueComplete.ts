@@ -1,33 +1,21 @@
 import { onCompleteStatus } from "../enums";
-import { ApiResponseOk } from "../models/apiResponseOk";
+import { AiModelResponseOk } from "../models/aiModelResponseOk";
 import { ObdQueueCompletedModel } from "../models/obdQueueCompletedModel";
 import { ObdQueue } from "../models/obdQueueModel";
 import { deleteFromObdQueue } from "../utils/deleteFromQueue";
 
 /**
- * @description: "This function move document from queue to gd complete collection"
+ * @description: "This function move document from queue to obd complete collection"
  */
-export async function onQueueComplete(
-  oldestDocuemnt: ObdQueue,
-  apiResponse: ApiResponseOk
-) {
+export async function onQueueComplete(oldestDocuemnt: ObdQueue, apiResponse: AiModelResponseOk) {
   console.log("about to complete....", apiResponse);
 
-  const { _id, present_id, s3_bucket_url, gp_cdn_url, cloud_front_url } =
-    oldestDocuemnt;
-
-  const { total_frame_count, frame_rate, duration } = apiResponse.data;
+  const { _id, ...documentWithoutId } = oldestDocuemnt;
 
   try {
     await ObdQueueCompletedModel.create({
-      present_id,
-      s3_bucket_url,
-      gp_cdn_url,
-      cloud_front_url,
+      ...documentWithoutId,
       video_processor_api_response: apiResponse,
-      total_frame_count,
-      frame_rate,
-      duration,
       publish_status: onCompleteStatus.UNPUBLISHED,
     });
 

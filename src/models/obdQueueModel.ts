@@ -9,17 +9,9 @@ export interface ObdQueue extends SharedFields {
 const ObdQueueSchema: Schema = new Schema(
   {
     ...SharedFieldsSchema.obj,
-    q_status: {
-      type: String,
-      enum: Object.values(QueueStatus),
-      default: QueueStatus.PENDING,
-    },
+    q_status: { type: String, enum: Object.values(QueueStatus), default: QueueStatus.PENDING },
   },
   { timestamps: true }
 );
 
-export const ObdQueueModel = mongoose.model<ObdQueue>(
-  "obd_queue",
-  ObdQueueSchema,
-  "obd_queue"
-);
+export const ObdQueueModel = mongoose.model<ObdQueue>("obd_queue", ObdQueueSchema, "obd_queue");
