@@ -4,7 +4,7 @@ import { ErrorTypes } from "../enums";
 export interface AiModelResponseFail {
   status: 0;
   error_type: ErrorTypes;
-  detail: string;
+  details: string;
 }
 
 export const AiModelResponseFailSchema: Schema = new Schema(
@@ -15,7 +15,7 @@ export const AiModelResponseFailSchema: Schema = new Schema(
       enum: Object.values(ErrorTypes),
       required: true,
     },
-    detail: { type: String, required: true },
+    details: { type: String, required: true },
   },
   { _id: false }
 );

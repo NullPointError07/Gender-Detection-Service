@@ -1,5 +1,6 @@
 import { ErrorTypes } from "../enums";
 import { AiModelResponseFail } from "../models/aiModelResponseFail";
+import { ObdQueueCompletedModel } from "../models/obdQueueCompletedModel";
 import {
   ObdQueueErrorModel,
   ObdQueueInvalidVideoModel,
@@ -9,7 +10,7 @@ import { ObdQueue } from "../models/obdQueueModel";
 import { deleteFromObdQueue } from "../utils/deleteFromQueue";
 
 /**
- * @description: "This Function will handle error types and create error document in error collection according to type"
+ * @description: "It takes status:0 from Ai Model and creates document according to error_types in different collections"
  */
 export async function onQueueError(oldestDocuemnt: ObdQueue, apiResponse: AiModelResponseFail) {
   const { _id, ...documentWithoutId } = oldestDocuemnt.toObject();
@@ -24,17 +25,28 @@ export async function onQueueError(oldestDocuemnt: ObdQueue, apiResponse: AiMode
 
   try {
     switch (error_type) {
+      case ErrorTypes.INVALID_VIDEO:
+        console.log("invalid_video", documentData);
+        await ObdQueueInvalidVideoModel.create(documentData);
+        console.log("| video has been moved to 'invalid' collection");
+        break;
       case ErrorTypes.TIMEOUT:
         console.log("timeout:", documentData);
         await ObdQueueTimeOutModel.create(documentData);
         console.log("| video has been moved to 'timeout' collection");
         break;
-      case ErrorTypes.INVALID_VIDEO:
-        console.log("here....", documentData);
-        await ObdQueueInvalidVideoModel.create(documentData);
-        console.log("| video has been moved to 'invalid' collection");
+      case ErrorTypes.NO_OBJECT:
+        console.log("no_object", documentData);
+        await ObdQueueCompletedModel.create(documentData);
+        console.log("| video has been moved to 'completed' collection");
+        break;
+      case ErrorTypes.DOWNLOAD_FAILED:
+        console.log("download_failed", documentData);
+        await ObdQueueErrorModel.create(documentData);
+        console.log("| video has been moved to 'error' collection");
         break;
       case ErrorTypes.ERROR:
+        console.log("general error", documentData);
         await ObdQueueErrorModel.create(documentData);
         console.log("| video has been moved to 'error' collection");
         break;
