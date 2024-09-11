@@ -10,7 +10,7 @@ import { ObdQueue } from "../models/obdQueueModel";
 import { deleteFromObdQueue } from "../utils/deleteFromQueue";
 
 /**
- * @description: "It takes status:0 from Ai Model and creates document according to error_types in different collections"
+ * @description: "It takes status: 0 from Ai Model and creates document according to error_types in different collections"
  */
 export async function onQueueError(oldestDocuemnt: ObdQueue, apiResponse: AiModelResponseFail) {
   const { _id, ...documentWithoutId } = oldestDocuemnt.toObject();
@@ -23,35 +23,34 @@ export async function onQueueError(oldestDocuemnt: ObdQueue, apiResponse: AiMode
   const { error_type } = apiResponse;
   console.log(`| video processing error, type:${error_type}`);
 
+  const errorTypeHandlers: Record<ErrorTypes, { model: any; message: string }> = {
+    [ErrorTypes.INVALID_VIDEO]: {
+      model: ObdQueueInvalidVideoModel,
+      message: "video has been moved to 'invalid' collection",
+    },
+    [ErrorTypes.TIMEOUT]: {
+      model: ObdQueueTimeOutModel,
+      message: "video has been moved to 'timeout' collection",
+    },
+    [ErrorTypes.DOWNLOAD_FAILED]: {
+      model: ObdQueueErrorModel,
+      message: "video has been moved to 'error' collection",
+    },
+    [ErrorTypes.ERROR]: {
+      model: ObdQueueErrorModel,
+      message: "video has been moved to 'error' collection",
+    },
+  };
+
   try {
-    switch (error_type) {
-      case ErrorTypes.INVALID_VIDEO:
-        console.log("invalid_video", documentData);
-        await ObdQueueInvalidVideoModel.create(documentData);
-        console.log("| video has been moved to 'invalid' collection");
-        break;
-      case ErrorTypes.TIMEOUT:
-        console.log("timeout:", documentData);
-        await ObdQueueTimeOutModel.create(documentData);
-        console.log("| video has been moved to 'timeout' collection");
-        break;
-      case ErrorTypes.NO_OBJECT:
-        console.log("no_object", documentData);
-        await ObdQueueCompletedModel.create(documentData);
-        console.log("| video has been moved to 'completed' collection");
-        break;
-      case ErrorTypes.DOWNLOAD_FAILED:
-        console.log("download_failed", documentData);
-        await ObdQueueErrorModel.create(documentData);
-        console.log("| video has been moved to 'error' collection");
-        break;
-      case ErrorTypes.ERROR:
-        console.log("general error", documentData);
-        await ObdQueueErrorModel.create(documentData);
-        console.log("| video has been moved to 'error' collection");
-        break;
-      default:
-        console.log("| Unknown error type:", error_type);
+    const handler = errorTypeHandlers[error_type];
+
+    if (handler) {
+      console.log(`| ${error_type}:`, documentData);
+      await handler.model.create(documentData);
+      console.log(`| ${handler.message}`);
+    } else {
+      console.log("| Unknown error type:", error_type);
     }
 
     await deleteFromObdQueue(_id);
