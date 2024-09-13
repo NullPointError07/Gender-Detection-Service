@@ -30,7 +30,7 @@ export async function cronOutputPublisher() {
 
     const { present_id, video_processor_api_response } = oldestUnPublishedDoc;
 
-    const publicationData = { present_id, video_processor_api_response };
+    const publicationData = { present_id, data: video_processor_api_response?.data };
 
     console.log("| Object Publication API: ", objectPublicationApi);
     console.log("| Invoking publication API with: ", publicationData);

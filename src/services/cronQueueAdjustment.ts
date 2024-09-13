@@ -7,8 +7,11 @@ import { queueAdjustmentApi, updateUnqueudPresentsApi } from "../utils/apiUrls";
  */
 export async function cronQueueAdjustment() {
   console.log(`+---------- QUEUE ADJUSTMENT INITIATED AT ${new Date()} ----------+`);
+  // const queryData = {
+  //   created_date: new Date(new Date().setDate(new Date().getDate() - 1)).toISOString().split("T")[0],
+  // };
   const queryData = {
-    created_date: new Date(new Date().setDate(new Date().getDate() - 1)).toISOString().split("T")[0],
+    created_date: "2024-09-12",
   };
   console.log(`| Adjustment will take place for: ${queryData.created_date}`);
 
