@@ -1,6 +1,5 @@
 import { ErrorTypes } from "../enums";
 import { AiModelResponseFail } from "../models/aiModelResponseFail";
-import { ObdQueueCompletedModel } from "../models/obdQueueCompletedModel";
 import {
   ObdQueueErrorModel,
   ObdQueueInvalidVideoModel,
