@@ -1,5 +1,6 @@
 import express from "express";
 import { ObdQueueModel } from "../models/obdQueueModel";
+import { obdSetQueue } from "../services/obdSetQueue";
 
 const router = express.Router();
 
@@ -8,22 +9,8 @@ const router = express.Router();
  */
 router.post("/", async (req, res) => {
   console.log("+------------ NEW QUEUE-ITEM COMING THROUGH ---------+");
-  console.log("| Payload data: ", req.body);
 
-  try {
-    await ObdQueueModel.create(req.body);
-    console.log("| Queue set successful");
-    console.log("+-------------- END -----------+");
-    res.status(201).json({ status: 1, message: "Queue Set Successfully" });
-  } catch (error) {
-    console.log("| Queue set FAILED");
-    console.log("+-------------- END -----------+");
-    res.status(500).json({
-      status: 0,
-      message: "Queue Set Failure",
-      error: (error as Error).message,
-    });
-  }
+  await obdSetQueue(req, res);
 });
 
 export { router as ObdSetQueueRouter };
