@@ -4,6 +4,7 @@ import { onQueueComplete } from "./onQueueComplete";
 import { updateQueueStatus } from "../utils/updateQueueStatus";
 import { onQueueError } from "./onQueueError";
 import { objectDetectionApi } from "../utils/apiUrls";
+import { deleteFromObdQueue } from "../utils/deleteFromQueue";
 
 /**
  * @description: "This function will process the video send request in ai model and save the response according response status"
@@ -74,6 +75,8 @@ export async function processQueue() {
       default:
         console.error("Unknown status type:", response?.data.status);
     }
+
+    await deleteFromObdQueue(_id);
 
     console.log("+-------------- Processing Complete -----------+\n\n\n\n");
   } catch (error) {

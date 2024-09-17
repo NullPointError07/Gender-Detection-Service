@@ -5,6 +5,7 @@ import { onObdPublishError } from "./onObdPublishError";
 import { onObdPublishComplete } from "./onObdPublishComplete";
 import { updatePublishStatus } from "../utils/updatePublishStatus";
 import { ObdQueueCompletedModel } from "../models/obdQueueCompletedModel";
+import { deleteFromObdCompleted } from "../utils/deleteFromObdCompleted";
 
 /**
  * @description: "This Function will publish a video to fanfare backend from OBD Service(OBDCompleted)"
@@ -28,7 +29,7 @@ export async function cronOutputPublisher() {
     await updatePublishStatus(oldestUnPublishedDoc?._id);
     console.log("| Updated publish_status to in_progress, publisher is busy now");
 
-    const { present_id, video_processor_api_response } = oldestUnPublishedDoc;
+    const { _id, present_id, video_processor_api_response } = oldestUnPublishedDoc;
 
     const publicationData = { present_id, data: video_processor_api_response?.data };
 
@@ -57,13 +58,6 @@ export async function cronOutputPublisher() {
               msg: "ECONNABORTED",
             },
           };
-        } else {
-          response = {
-            data: {
-              status: 0,
-              msg: "An unknown error type Occured",
-            },
-          };
         }
       } else {
         response = {
@@ -75,7 +69,7 @@ export async function cronOutputPublisher() {
       }
     }
 
-    switch (response.data.status) {
+    switch (response?.data.status) {
       case 0:
         await onObdPublishError(oldestUnPublishedDoc, response.data);
         break;
@@ -83,9 +77,10 @@ export async function cronOutputPublisher() {
         await onObdPublishComplete(oldestUnPublishedDoc, response.data);
         break;
       default:
-        console.error("Unknown status type:", response.data.status);
+        console.error("Unknown status type:", response?.data.status);
     }
 
+    await deleteFromObdCompleted(_id);
     console.log("+------ OBD Publisher Complete --------+\n\n\n");
   } catch (error) {
     console.log("| Failure At Publishig Cron", error);

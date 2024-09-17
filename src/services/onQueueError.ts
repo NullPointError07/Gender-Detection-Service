@@ -6,7 +6,6 @@ import {
   ObdQueueTimeOutModel,
 } from "../models/obdQueueErrorTypesModel";
 import { ObdQueue } from "../models/obdQueueModel";
-import { deleteFromObdQueue } from "../utils/deleteFromQueue";
 
 /**
  * @description: "It takes status: 0 from Ai Model and creates document according to error_types in different collections"
@@ -51,8 +50,6 @@ export async function onQueueError(oldestDocuemnt: ObdQueue, apiResponse: AiMode
     } else {
       console.log("| Unknown error type:", error_type);
     }
-
-    await deleteFromObdQueue(_id);
   } catch (error) {
     console.log("| Failure to move Queue: From Queue to Timeout", error);
     console.log("+------- END -------+");
