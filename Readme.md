@@ -15,14 +15,22 @@
 1. **Clone the repository:**
 
    ```sh
-   git clone https://github.com/FanFareBD/Object-detection-micro-service
+   git clone https://github.com/FanFareBD/gender-detection-micro-service.git
    ```
 
 2. **Go to the project directory**
+
    ```sh
-   cd Object Detection Service
+   cd Gender Detection Service
    ```
-3. **Install dependencies**
+
+3. **Switch to branch**
+
+   ```sh
+   Object-Detection
+   ```
+
+4. **Install dependencies**
 
    Make sure you have Node.js installed. Then run:
 
