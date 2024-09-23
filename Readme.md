@@ -16,6 +16,7 @@
 
    ```sh
    git clone https://github.com/FanFareBD/gender-detection-micro-service.git
+   git clone https://github.com/FanFareBD/gender-detection-micro-service.git
    ```
 
 2. **Go to the project directory**
